@@ -1,3 +1,4 @@
+
 # Astro Starter Kit: Minimal
 
 ```sh
@@ -41,3 +42,7 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+=======
+# -instalaciones-tirado-web
+Sitio web oficial de Instalaciones Tirado SAS. Carpintería de autor, estructuras en madera maciza, escaleras, pisos   y techos en Bogotá. Desarrollado con Astro y Tailwind CSS.
+>>>>>>> 6c362de27c903c2263c8b8b308e97820338af67f
