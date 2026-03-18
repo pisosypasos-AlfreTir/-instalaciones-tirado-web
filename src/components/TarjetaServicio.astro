@@ -1,0 +1,41 @@
+---
+// src/components/TarjetaServicio.astro
+export interface Props {
+    servicio: any;
+}
+
+const { servicio } = Astro.props;
+---
+
+<a href={`/servicios/${servicio.id}`} class="group block no-underline w-24 md:w-28 mx-auto">
+
+    <div class="relative bg-white p-1 shadow-md transition-all duration-500 group-hover:shadow-xl group-hover:-translate-y-1 border border-slate-100">
+
+        <!-- Marco de imagen -->
+        <div class="relative overflow-hidden bg-slate-50 border border-slate-200">
+
+            <img 
+                src={servicio.imagen} 
+                alt={servicio.nombre} 
+                class="img-square transition-all duration-700 grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110"
+                loading="lazy"
+            >
+
+        </div>
+        
+        <!-- Texto -->
+        <div class="pt-2 pb-1 text-center">
+
+            <h3 class="text-[8px] font-bold text-nogal uppercase tracking-tighter truncate leading-none">
+                {servicio.nombre}
+            </h3>
+
+            <p class="text-[6px] text-oro-premium font-medium uppercase tracking-[0.2em] mt-1">
+                {servicio.categoria}
+            </p>
+
+        </div>
+
+    </div>
+
+</a>

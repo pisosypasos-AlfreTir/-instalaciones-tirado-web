@@ -1,0 +1,238 @@
+---
+// src/components/Hero.astro
+// Fondo: textura de madera animada con desplazamiento horizontal CSS infinito.
+// La imagen se repite en X (repeat-x) y se desliza de izquierda a derecha de forma
+// continua con @keyframes slide. No hay <img> — el fondo es puramente CSS.
+---
+
+<section id="hero-section" class="hero-section">
+
+    <!-- Overlay 1: degradado vertical nogal (legibilidad superior e inferior) -->
+    <div class="hero-overlay-v" aria-hidden="true"></div>
+
+    <!-- Overlay 2: capa semitransparente uniforme para oscurecer la textura -->
+    <div class="hero-overlay-u" aria-hidden="true"></div>
+
+    <!-- Contenido centrado sobre el fondo -->
+    <div class="relative z-20 container-modern py-24 text-center text-white">
+
+        <!-- Eyebrow: marca + experiencia real -->
+        <span class="hero-eyebrow animate-fade-in">
+            Instalaciones Tirado S.A.S &middot; 30 años de oficio
+        </span>
+
+        <!-- H1: eslogan oficial con contraste tipográfico nogal/oro -->
+        <h1 class="hero-h1 animate-fade-up">
+            Calidad que se siente,<br />
+            <span class="text-oro-premium italic">confianza que perdura.</span>
+        </h1>
+    </div>
+</section>
+
+<style>
+/* ════════════════════════════════════════
+   FONDO ANIMADO
+   Técnica: background-image CSS repeat-x
+   + @keyframes slide (background-position X)
+   La imagen se repite horizontalmente de forma
+   continua. Para que el bucle sea perfecto, la
+   animación lleva el fondo 50% hacia la derecha
+   y CSS repeat-x vuelve a empezar desde el mismo
+   punto visual → transición imperceptible.
+════════════════════════════════════════ */
+
+.hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    /*
+     * ── REEMPLAZA ESTA RUTA con tu imagen real ──
+     * La imagen debe ser una textura de madera
+     * con buen ancho (mín. 1200px) y sin costuras
+     * visibles en los bordes izquierdo/derecho.
+     *
+     * Ruta actual en el proyecto: /imagenes/maderas-textura-2.jpg
+     * Si tienes una textura tileable mejor, úsala aquí.
+     */
+    background-image: url('/imagenes/maderas-textura-2.jpg');
+
+    /* repeat-x: la imagen se repite solo en horizontal (sin cortes verticales) */
+    background-repeat: repeat-x;
+
+    /* cover-height: la imagen llena el alto de la sección */
+    background-size: auto 100%;
+
+    /* Punto de inicio del desplazamiento */
+    background-position: 0% center;
+
+    /* Fondo fallback nogal mientras carga la imagen */
+    background-color: #2D241E;
+
+    /* Animación: mueve background-position de 0% a 100% en bucle infinito */
+    animation: madera-slide 40s linear infinite;
+}
+
+@keyframes madera-slide {
+    0%   { background-position: 0%   center; }
+    100% { background-position: 100% center; }
+}
+
+/* ── Reducción de movimiento: respeta la preferencia del sistema ── */
+@media (prefers-reduced-motion: reduce) {
+    .hero-section {
+        animation: none;
+        background-position: center center;
+        background-size: cover;
+    }
+}
+
+/* ════════════════════════════════════════
+   OVERLAYS
+════════════════════════════════════════ */
+
+/* Overlay uniforme: oscurece la textura para que el texto sea legible */
+.hero-overlay-u {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: rgba(20, 10, 5, 0.52); /* oscuro semitransparente */
+}
+
+/* Overlay vertical: gradiente nogal que apaga los extremos superior e inferior */
+.hero-overlay-v {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(
+        to bottom,
+        rgba(45, 36, 30, 0.80) 0%,      /* nogal en el top */
+        rgba(45, 36, 30, 0.10) 30%,     /* se aclara hacia el centro */
+        rgba(45, 36, 30, 0.10) 70%,     /* zona central despejada */
+        rgba(45, 36, 30, 0.85) 100%     /* nogal en el bottom */
+    );
+}
+
+/* ════════════════════════════════════════
+   CONTENIDO HERO
+════════════════════════════════════════ */
+
+.hero-eyebrow {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    margin-bottom: 2.5rem;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: #C9A84C;           /* oro-premium */
+    border: 1px solid rgba(201, 168, 76, 0.4);
+    background: rgba(45, 36, 30, 0.84);
+    backdrop-filter: blur(12px);
+    border-radius: 9999px;
+}
+
+.hero-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 8vw, 7rem);
+    font-weight: 900;
+    color: white;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    text-shadow: 0 4px 32px rgba(0,0,0,0.5);
+    margin-bottom: 2rem;
+}
+
+.hero-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    color: rgba(226, 232, 240, 0.78);
+    max-width: 42rem;
+    margin: 0 auto 1.25rem;
+    font-weight: 300;
+    line-height: 1.65;
+}
+
+.hero-microcred {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: rgba(201, 168, 76, 0.65);
+    margin-bottom: 3.5rem;
+}
+
+.hero-ctas {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 640px) {
+    .hero-ctas { flex-direction: row; gap: 1.5rem; }
+}
+
+/* Botón primario: hereda .btn-premium de globals.css */
+.hero-btn-primary {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    padding: 1.1rem 2.5rem;
+    box-shadow: 0 8px 32px rgba(201, 168, 76, 0.25);
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+/* Botón secundario: texto subrayado interactivo */
+.hero-btn-secondary {
+    font-family: 'Inter', sans-serif;
+    display: inline-block;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 1.1rem 2.5rem;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.hero-btn-secondary:hover {
+    border-color: #C9A84C;
+}
+
+/* ════════════════════════════════════════
+   ANIMACIONES DE ENTRADA
+════════════════════════════════════════ */
+
+.animate-fade-in {
+    animation: fadeIn 1.5s ease-out forwards;
+}
+
+.animate-fade-up {
+    opacity: 0;
+    animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>

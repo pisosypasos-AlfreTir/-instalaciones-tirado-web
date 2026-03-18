@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   TOKENS DE MARCA — Instalaciones Tirado SAS
+   Usa estas variables en cualquier componente
+   con <style> (no scoped a Tailwind).
+───────────────────────────────────────────── */
+:root {
+    --color-nogal:       #2D241E;
+    --color-oro-premium: #C9A84C;
+    --color-fondo:       #fdfcfb;
+    --color-texto:       #333333;
+    --font-titulos:      'Playfair Display', Georgia, serif;
+    --font-texto:        'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+    html { @apply scroll-smooth; }
+    body { @apply font-texto text-texto-principal bg-fondo-neutro leading-relaxed antialiased; }
+    h1, h2, h3, h4, h5, h6 { @apply font-titulos font-black tracking-tight; }
+}
+
+@layer components {
+    .container-modern   { @apply max-w-7xl mx-auto px-6 lg:px-12; }
+    .btn-premium        { @apply inline-flex items-center justify-center px-8 py-4 bg-nogal text-white font-bold rounded-sm transition-all duration-300 hover:bg-oro-premium hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0; }
+    .card-luxury        { @apply bg-white border border-slate-100 shadow-sm transition-all duration-500 hover:shadow-2xl hover:border-oro-premium/20; }
+    .section-title      { @apply text-4xl md:text-5xl lg:text-6xl font-black mb-6 text-nogal leading-[1.1]; }
+    .section-subtitle   { @apply text-oro-premium font-bold text-xs uppercase tracking-ultra-wide mb-4 block; }
+}

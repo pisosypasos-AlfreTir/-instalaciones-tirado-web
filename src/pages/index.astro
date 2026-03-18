@@ -1,0 +1,1387 @@
+---
+// src/pages/index.astro
+// Hero.astro usa background-image CSS animado (madera-slide @keyframes).
+// NO modificar Hero.astro. Las secciones nuevas se construyen aquí con
+// continuidad visual: paleta nogal/#2D241E + oro/#C9A84C + blanco/crema.
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import servicios from '../data/servicios.json';
+import TarjetaServicio from '../components/TarjetaServicio.astro';
+
+const title = "Maderas";
+const serviciosDestacados = servicios.filter(s => s.destacado);
+---
+
+<Layout title={title}>
+<div class="page-wrapper">
+
+    <!-- ══════════════════════════════════════════
+         HERO — NO TOCAR. Ver Hero.astro.
+         background-image CSS + madera-slide.
+    ══════════════════════════════════════════ -->
+    <Hero />
+
+
+    <!-- ══════════════════════════════════════════
+         BANDA DE CIFRAS
+         Flota sobre el Hero con margin-top negativo.
+         bg-nogal casi opaco con borde inferior oro.
+    ══════════════════════════════════════════ -->
+    <div class="cifras-wrapper">
+        <section class="cifras-band parallax" data-speed="0.08">
+
+            <div class="cifra-item group">
+                <span class="cifra-numero group-hover:scale-110">30+</span>
+                <span class="cifra-label">Años de oficio</span>
+            </div>
+
+            <div class="cifra-sep" aria-hidden="true"></div>
+
+            <div class="cifra-item group">
+                <span class="cifra-numero group-hover:scale-110">500+</span>
+                <span class="cifra-label">Obras terminadas</span>
+            </div>
+
+            <div class="cifra-sep" aria-hidden="true"></div>
+
+            <div class="cifra-item group">
+                <span class="cifra-numero group-hover:scale-110">100%</span>
+                <span class="cifra-label">Garantía por escrito</span>
+            </div>
+
+            <div class="cifra-sep" aria-hidden="true"></div>
+
+            <!-- Cobertura nacional: ícono de mapa + texto, sin número grande -->
+            <div class="cifra-item cifra-item--cobertura group">
+                <span class="cifra-cobertura-ico" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Silueta esquemática de Colombia -->
+                        <path
+                            d="M13 4 L19 4 L21 7 L20 10 L23 12 L22 16 L19 18 L20 22 L17 26 L14 28 L11 25 L10 21 L12 18 L10 15 L11 11 L9 8 Z"
+                            stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"
+                        />
+                        <!-- Pin de ubicación centrado -->
+                        <circle cx="16" cy="15" r="2" fill="currentColor" opacity=".7"/>
+                        <line x1="16" y1="17" x2="16" y2="20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <span class="cifra-numero cifra-numero--cobertura group-hover:scale-110">Nacional</span>
+                <span class="cifra-label">Cobertura · Colombia</span>
+            </div>
+
+        </section>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════
+         SECCIÓN 01 — SOBRE NOSOTROS
+         Fondo: blanco crema #fdfcfb.
+         Imagen estática de taller/obra a la derecha.
+         Texto: 30 años, fidelidad técnica, diferenciador.
+    ══════════════════════════════════════════ -->
+    <section id="sobre-nosotros" class="sobre-section">
+
+        <!-- Columna texto -->
+        <div class="sobre-texto anim-reveal">
+
+            <span class="sec-eyebrow">Sobre nosotros</span>
+
+            <h2 class="sec-h2">
+                Treinta años<br/>
+                <span class="sec-h2-light">instalando con criterio.</span>
+            </h2>
+
+            <div class="sec-divider" aria-hidden="true"></div>
+
+            <p class="sec-p">
+                Instalaciones Tirado S.A.S lleva tres décadas en obra. No en ventas, no en promesas:
+                en obra real. Residencias particulares, hoteles, oficinas de alta gama y proyectos
+                de rehabilitación histórica, con presencia y cobertura en todo el territorio nacional.
+            </p>
+
+            <p class="sec-p" style="--anim-delay: 0.15s">
+                Nuestro diferenciador no es el precio ni el marketing. Es la fidelidad técnica:
+                respetamos los tiempos de aclimatación de cada especie, ejecutamos las juntas de
+                dilatación con la holgura que exige la normativa y usamos solo adhesivos y barnices
+                certificados de alta gama. Esos detalles son los que deciden si un parqué dura
+                cinco años o cincuenta.
+            </p>
+
+            <ul class="sobre-lista" style="--anim-delay: 0.25s">
+                <li>
+                    <span class="lista-ico" aria-hidden="true">—</span>
+                    Instalación según normativas técnicas vigentes
+                </li>
+                <li>
+                    <span class="lista-ico" aria-hidden="true">—</span>
+                    Asesoramiento en la compra del material antes de la obra
+                </li>
+                <li>
+                    <span class="lista-ico" aria-hidden="true">—</span>
+                    Nivelación de soleras previa cuando la base lo requiere
+                </li>
+                <li>
+                    <span class="lista-ico" aria-hidden="true">—</span>
+                    Mantenimiento post-instalación: lijado y barnizado
+                </li>
+            </ul>
+
+        </div>
+
+        <!-- Columna imagen: reemplaza src con tu foto de obra/taller real -->
+        <div class="sobre-imagen anim-reveal" style="--anim-delay: 0.1s">
+            <div class="sobre-img-frame">
+                <!--
+                    REEMPLAZA con tu imagen real de obra o taller.
+                    Dimensiones recomendadas: 800×1000px, orientación vertical.
+                    Ejemplo: src="/imagenes/taller-instalaciones-tirado.jpg"
+                -->
+                <img
+                    src="/imagenes/escalera-cerezo.jpg"
+                    alt="Instalador trabajando el parqué en obra — Instalaciones Tirado S.A.S"
+                    class="sobre-img"
+                    loading="lazy"
+                />
+                <!-- Filete decorativo oro en la esquina -->
+                <div class="sobre-img-deco" aria-hidden="true"></div>
+            </div>
+
+            <!-- Tarjeta flotante de dato clave -->
+            <div class="sobre-dato-flotante">
+                <span class="dato-flotante-num">30</span>
+                <span class="dato-flotante-txt">años de oficio continuo<br/>en instalación de madera</span>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         SECCIÓN 02 — SERVICIOS TÉCNICOS
+         Fondo: nogal oscuro para contraste fuerte
+         tras la sección blanca de Sobre Nosotros.
+         Grid de tarjetas de servicio con icono SVG,
+         título técnico y descripción de ejecución.
+    ══════════════════════════════════════════ -->
+    <section id="servicios" class="servicios-section">
+
+        <div class="servicios-header anim-reveal">
+            <span class="sec-eyebrow sec-eyebrow--claro">Especialidades técnicas</span>
+            <h2 class="sec-h2 sec-h2--claro">
+                Lo que instalamos.<br/>
+                <span class="sec-h2-light sec-h2-light--oro">Cómo lo instalamos.</span>
+            </h2>
+            <p class="servicios-intro">
+                Cada servicio sigue un protocolo de ejecución estricto. No improvisamos fases
+                ni materiales. El resultado es una instalación estable, sin ruidos y sin desniveles.
+            </p>
+        </div>
+
+        <!-- Grid de servicios: 3 columnas en desktop -->
+        <div class="servicios-grid">
+
+            <!-- Servicio 1 — Pisos Laminados y SPC -->
+            <article class="serv-card anim-reveal" style="--anim-delay: 0.05s">
+                <div class="serv-icon" aria-hidden="true">
+                    <!-- Icono: capas de piso laminado (capa base + clic + capa de uso) -->
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="10" width="40" height="6"  rx="1" stroke="currentColor" stroke-width="1.5"/>
+                        <rect x="4" y="20" width="40" height="6"  rx="1" stroke="currentColor" stroke-width="1.5"/>
+                        <rect x="4" y="30" width="40" height="6"  rx="1" stroke="currentColor" stroke-width="1.5"/>
+                        <!-- Clic macho-hembra derecha -->
+                        <path d="M44 23 L44 20 L48 20 L48 26 L44 26" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Indicador de capas -->
+                        <line x1="2" y1="10" x2="2" y2="36" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h3 class="serv-titulo">Pisos Laminados y SPC</h3>
+                <p class="serv-desc">
+                    Suministro e instalación de pisos de alta resistencia con acabados modernos
+                    y duraderos. Trabajamos con laminado AC4/AC5 y SPC rígido de núcleo de piedra,
+                    ideales para alto tránsito, zonas húmedas y proyectos residenciales o comerciales.
+                </p>
+                <span class="serv-normativa">Laminado AC4–AC5 · SPC núcleo rígido</span>
+            </article>
+
+            <!-- Servicio 2 — Decks y Exteriores -->
+            <article class="serv-card anim-reveal" style="--anim-delay: 0.15s">
+                <div class="serv-icon" aria-hidden="true">
+                    <!-- Icono: decking exterior con tornillo/fijación oculta -->
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="10" width="40" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                        <rect x="4" y="21" width="40" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                        <rect x="4" y="32" width="40" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="12" cy="13.5" r="2" fill="currentColor"/>
+                        <circle cx="36" cy="24.5" r="2" fill="currentColor"/>
+                        <circle cx="24" cy="35.5" r="2" fill="currentColor"/>
+                    </svg>
+                </div>
+                <h3 class="serv-titulo">Decks y Exteriores</h3>
+                <p class="serv-desc">
+                    Instalación de plataformas de madera tratada o sintética, ideales para
+                    zonas húmedas y áreas sociales. Fijación oculta que elimina tornillos a la
+                    vista, garantiza drenaje correcto y protege la tabla frente a la intemperie.
+                </p>
+                <span class="serv-normativa">Fijación oculta · Madera tratada clase 4</span>
+            </article>
+
+            <!-- Servicio 3 — Pulida de Pisos Sin Polvo -->
+            <article class="serv-card anim-reveal" style="--anim-delay: 0.25s">
+                <div class="serv-icon" aria-hidden="true">
+                    <!-- Icono: máquina lijadora orbital con tubo de aspiración -->
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Cuerpo de la máquina -->
+                        <rect x="10" y="20" width="28" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                        <!-- Plato lijador (base) -->
+                        <rect x="8"  y="34" width="32" height="4"  rx="2" stroke="currentColor" stroke-width="1.3"/>
+                        <!-- Tubo de aspiración -->
+                        <path d="M30 20 C30 14, 36 12, 40 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                        <circle cx="40" cy="7" r="2.5" stroke="currentColor" stroke-width="1.2"/>
+                        <!-- Partículas de polvo aspiradas (líneas curvas subiendo al tubo) -->
+                        <path d="M28 18 C29 15, 31 14, 33 15" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" opacity=".6"/>
+                        <path d="M24 17 C25 13, 28 12, 30 13" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" opacity=".4"/>
+                        <!-- Superficie del suelo -->
+                        <line x1="4" y1="38" x2="44" y2="38" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="3 2"/>
+                    </svg>
+                </div>
+                <h3 class="serv-titulo">Pulida de Pisos Sin Polvo</h3>
+                <p class="serv-desc">
+                    Restauración profesional de madera natural mediante tecnología de succión
+                    integrada: el polvo se captura en origen sin contaminar el ambiente. Incluye
+                    lijado, sellado de juntas y acabado con barniz o aceite de alta resistencia.
+                </p>
+                <span class="serv-normativa">Succión en origen · Polvo cero · Barnices sin COV</span>
+            </article>
+
+            <!-- Servicio 4 — Pérgolas y Estructuras -->
+            <article class="serv-card anim-reveal" style="--anim-delay: 0.1s">
+                <div class="serv-icon" aria-hidden="true">
+                    <!-- Icono: pérgola vista de frente con vigas y montantes -->
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="8"  y1="8"  x2="8"  y2="42" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="40" y1="8"  x2="40" y2="42" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="6"  y1="8"  x2="42" y2="8"  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="16" y1="8"  x2="16" y2="24" stroke="currentColor" stroke-width="1.2"/>
+                        <line x1="24" y1="8"  x2="24" y2="24" stroke="currentColor" stroke-width="1.2"/>
+                        <line x1="32" y1="8"  x2="32" y2="24" stroke="currentColor" stroke-width="1.2"/>
+                    </svg>
+                </div>
+                <h3 class="serv-titulo">Pérgolas y Estructuras</h3>
+                <p class="serv-desc">
+                    Creación de techos y estructuras en madera para transformar terrazas y patios
+                    en espacios funcionales. Cálculo de cargas, anclajes homologados y tratamiento
+                    de impregnación según la clase de riesgo de cada pieza estructural.
+                </p>
+                <span class="serv-normativa">Anclajes homologados · Clase de riesgo 3–4</span>
+            </article>
+
+            <!-- Servicio 5 — Construcción de Cabañas -->
+            <article class="serv-card anim-reveal" style="--anim-delay: 0.2s">
+                <div class="serv-icon" aria-hidden="true">
+                    <!-- Icono: cabaña en madera con cubierta a dos aguas y troncos -->
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Techo a dos aguas -->
+                        <polyline points="4,22 24,6 44,22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <!-- Cuerpo de la cabaña -->
+                        <rect x="8" y="22" width="32" height="18" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                        <!-- Troncos horizontales (3 líneas) -->
+                        <line x1="8"  y1="28" x2="40" y2="28" stroke="currentColor" stroke-width="1"/>
+                        <line x1="8"  y1="33" x2="40" y2="33" stroke="currentColor" stroke-width="1"/>
+                        <!-- Puerta centrada -->
+                        <rect x="20" y="30" width="8" height="10" rx="1" stroke="currentColor" stroke-width="1.2"/>
+                        <!-- Chimenea -->
+                        <rect x="30" y="9" width="4" height="8" rx="0.5" stroke="currentColor" stroke-width="1.2"/>
+                        <!-- Humo (líneas onduladas) -->
+                        <path d="M32 9 C31 7, 33 5, 32 3" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" opacity=".5"/>
+                    </svg>
+                </div>
+                <h3 class="serv-titulo">Construcción de Cabañas</h3>
+                <p class="serv-desc">
+                    Diseño y ejecución de proyectos campestres en madera, uniendo estética
+                    rústica con solidez estructural. Desde la cimentación hasta el acabado interior:
+                    estructura, cubierta, carpintería y revestimientos en un solo contrato.
+                </p>
+                <span class="serv-normativa">Estructura certificada · Madera seca de cámara</span>
+            </article>
+
+            <!-- Servicio 6 — Escaleras de Lujo -->
+            <article class="serv-card anim-reveal" style="--anim-delay: 0.3s">
+                <div class="serv-icon" aria-hidden="true">
+                    <!-- Icono: escalera en perspectiva con peldaños y pasamanos -->
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Peldaños en escalera (vista lateral) -->
+                        <polyline points="6,42 6,34 14,34 14,26 22,26 22,18 30,18 30,10 42,10"
+                                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <!-- Zanca (línea diagonal de base) -->
+                        <line x1="6" y1="42" x2="42" y2="42" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                        <!-- Pasamanos (paralelo a los peldaños, desplazado arriba) -->
+                        <polyline points="6,36 6,30 14,30 14,22 22,22 22,14 30,14 30,6 42,6"
+                                  stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity=".5"/>
+                        <!-- Balaustres (3 verticales) -->
+                        <line x1="10" y1="34" x2="10" y2="30" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+                        <line x1="20" y1="26" x2="20" y2="22" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+                        <line x1="28" y1="18" x2="28" y2="14" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h3 class="serv-titulo">Escaleras de Lujo</h3>
+                <p class="serv-desc">
+                    Diseño, fabricación y revestimiento de escaleras que se convierten en la
+                    pieza central del hogar. Trabajamos en madera maciza, ingeniería o combinada
+                    con vidrio y acero, con tolerancia de mecanizado ±0,5 mm en cada peldaño.
+                </p>
+                <span class="serv-normativa">CTE DB-SUA · Tolerancia ±0,5 mm · A medida</span>
+            </article>
+
+        </div>
+
+        <!-- CTA dentro de la sección de servicios -->
+        <div class="servicios-cta anim-reveal" style="--anim-delay: 0.35s">
+            <a href="/servicios" class="btn-servicios-sec">
+                Ver galería de proyectos finalizados →
+            </a>
+        </div>
+
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         SECCIÓN 03 — GARANTÍA Y CALIDAD
+         Fondo: crema/blanco con franja nogal a la
+         izquierda como separador visual.
+         Tres columnas con el proceso de garantía.
+    ══════════════════════════════════════════ -->
+    <section id="garantia" class="garantia-section">
+
+        <!-- Franja lateral decorativa (solo desktop) -->
+        <div class="garantia-franja" aria-hidden="true">
+            <span class="garantia-franja-txt">GARANTÍA · NORMATIVA · CALIDAD</span>
+        </div>
+
+        <div class="garantia-contenido">
+
+            <div class="garantia-header anim-reveal">
+                <span class="sec-eyebrow">Garantía y calidad</span>
+                <h2 class="sec-h2">
+                    Una instalación correcta<br/>
+                    <span class="sec-h2-light">no da problemas en cinco años.</span>
+                </h2>
+                <div class="sec-divider" aria-hidden="true"></div>
+                <p class="sec-p">
+                    No hablamos de promesas. Hablamos de estabilidad, acabados y normativa.
+                    Cada trabajo que entregamos incluye documentación técnica y garantía por escrito
+                    sobre la mano de obra.
+                </p>
+            </div>
+
+            <!-- Tres pilares de garantía -->
+            <div class="garantia-pilares">
+
+                <div class="pilar anim-reveal" style="--anim-delay: 0.05s">
+                    <div class="pilar-num">01</div>
+                    <div class="pilar-linea" aria-hidden="true"></div>
+                    <h4 class="pilar-titulo">Ejecución bajo normativa</h4>
+                    <p class="pilar-desc">
+                        Todas las instalaciones siguen las normativas técnicas vigentes
+                        (UNE, ISO, CTE). No son estándares opcionales: son el mínimo exigible
+                        para que la madera se comporte como debe durante décadas.
+                    </p>
+                </div>
+
+                <div class="pilar anim-reveal" style="--anim-delay: 0.18s">
+                    <div class="pilar-num">02</div>
+                    <div class="pilar-linea" aria-hidden="true"></div>
+                    <h4 class="pilar-titulo">Materiales certificados</h4>
+                    <p class="pilar-desc">
+                        Solo usamos adhesivos, barnices y sistemas de fijación con ficha
+                        técnica y certificación europea. Nunca materiales sin trazabilidad.
+                        El proveedor y el lote quedan registrados en el dossier de obra.
+                    </p>
+                </div>
+
+                <div class="pilar anim-reveal" style="--anim-delay: 0.32s">
+                    <div class="pilar-num">03</div>
+                    <div class="pilar-linea" aria-hidden="true"></div>
+                    <h4 class="pilar-titulo">Garantía por escrito</h4>
+                    <p class="pilar-desc">
+                        Al terminar la obra entregamos un certificado de garantía sobre
+                        la mano de obra. Si aparece algún problema técnico imputable a
+                        la instalación, lo resolvemos. Sin letra pequeña, sin discusiones.
+                    </p>
+                </div>
+
+                <!-- Pilar 04: Cobertura nacional -->
+                <div class="pilar pilar--cobertura anim-reveal" style="--anim-delay: 0.44s">
+                    <div class="pilar-num">04</div>
+                    <div class="pilar-linea" aria-hidden="true"></div>
+                    <!-- Ícono mapa Colombia inline -->
+                    <span class="pilar-mapa-ico" aria-hidden="true">
+                        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M16 5 L24 5 L26.5 9 L25 13 L28.5 15.5 L27.5 20.5 L24 23 L25 27.5 L21 33 L17 35.5 L13.5 32 L12.5 27 L15 23 L12.5 19.5 L14 14.5 L11 10.5 Z"
+                                stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="rgba(201,168,76,0.08)"
+                            />
+                            <!-- Pin ubicación -->
+                            <path d="M20 19 C20 19, 23.5 15.5, 23.5 13.5 C23.5 11.57 21.93 10 20 10 C18.07 10 16.5 11.57 16.5 13.5 C16.5 15.5 20 19 20 19Z"
+                                  stroke="currentColor" stroke-width="1.3" fill="none"/>
+                            <circle cx="20" cy="13.5" r="1.5" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <h4 class="pilar-titulo">Cobertura nacional</h4>
+                    <p class="pilar-desc">
+                        Operamos en todo el territorio colombiano. Bogotá es nuestra base,
+                        pero desplazamos equipo a cualquier ciudad para proyectos que lo
+                        requieran. Un solo interlocutor técnico para toda la obra.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Bloque de proceso: 4 pasos lineales -->
+            <div class="proceso-wrapper anim-reveal" style="--anim-delay: 0.4s">
+                <h3 class="proceso-titulo">Cómo trabajamos en cada obra</h3>
+                <ol class="proceso-pasos">
+                    <li class="paso">
+                        <span class="paso-num">1</span>
+                        <div>
+                            <strong class="paso-tit">Estudio previo</strong>
+                            <span class="paso-txt">Medición, diagnóstico de la base y asesoramiento sobre el material más adecuado para la estancia.</span>
+                        </div>
+                    </li>
+                    <li class="paso">
+                        <span class="paso-num">2</span>
+                        <div>
+                            <strong class="paso-tit">Preparación de solera</strong>
+                            <span class="paso-txt">Nivelación hasta tolerancia ≤ 3 mm / 2 m y, si es necesario, tratamiento de humedad ascendente.</span>
+                        </div>
+                    </li>
+                    <li class="paso">
+                        <span class="paso-num">3</span>
+                        <div>
+                            <strong class="paso-tit">Aclimatación y ejecución</strong>
+                            <span class="paso-txt">La madera aclimata en la estancia el tiempo mínimo requerido. La instalación respeta todas las juntas de dilatación perimetrales e intermedias.</span>
+                        </div>
+                    </li>
+                    <li class="paso">
+                        <span class="paso-num">4</span>
+                        <div>
+                            <strong class="paso-tit">Acabado y entrega</strong>
+                            <span class="paso-txt">Lijado fino, aplicación del acabado elegido y entrega de dossier técnico con garantía por escrito.</span>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         SECCIÓN 04 — CONTACTO / CTA FINAL
+         Fondo: nogal oscuro. Cierra la página con
+         el mismo tono que la banda de cifras.
+         Dos CTAs: WhatsApp primario + formulario.
+    ══════════════════════════════════════════ -->
+    <section id="contacto" class="contacto-section">
+
+        <!-- Textura de madera estática de fondo (sin animación, solo opacidad) -->
+        <div class="contacto-bg-texture" aria-hidden="true"></div>
+        <div class="contacto-bg-overlay"  aria-hidden="true"></div>
+
+        <div class="contacto-contenido">
+
+            <div class="anim-reveal">
+                <span class="sec-eyebrow sec-eyebrow--claro">Hablemos de su proyecto</span>
+                <h2 class="sec-h2 sec-h2--claro contacto-h2">
+                    ¿Necesita instalar madera<br/>
+                    <span class="sec-h2-light sec-h2-light--oro">y hacerlo bien a la primera?</span>
+                </h2>
+                <p class="contacto-eslogan">"Calidad que se siente, confianza que perdura."</p>
+            </div>
+
+            <!-- Dos columnas: CTAs + datos de contacto -->
+            <div class="contacto-grid anim-reveal" style="--anim-delay: 0.2s">
+
+                <!-- Columna izquierda: botones -->
+                <div class="contacto-ctas">
+                    <p class="contacto-cta-intro">
+                        Solicite un estudio de instalación. Visitamos su obra sin coste,
+                        medimos, diagnosticamos la base y le entregamos un presupuesto
+                        detallado en menos de 48 horas.
+                    </p>
+
+                    <!-- CTA primario: WhatsApp con mensaje pre-escrito -->
+                    <a
+                        href="https://wa.me/573132566705?text=Hola%2C%20me%20gustar%C3%ADa%20solicitar%20un%20estudio%20y%20presupuesto%20de%20instalaci%C3%B3n%20de%20madera."
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn-contacto-wa"
+                        aria-label="Contactar por WhatsApp — Instalaciones Tirado S.A.S"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                        </svg>
+                        Solicitar estudio y presupuesto
+                    </a>
+
+                    <!-- CTA secundario: galería -->
+                    <a href="/servicios" class="btn-contacto-sec">
+                        Ver proyectos finalizados →
+                    </a>
+
+                    <p class="contacto-micro">
+                        Respuesta en menos de 24 h &nbsp;·&nbsp; Visita de medición sin coste
+                    </p>
+                </div>
+
+                <!-- Columna derecha: datos de contacto -->
+                <div class="contacto-datos">
+
+                    <div class="dato-item">
+                        <span class="dato-ico" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 1.667A6.667 6.667 0 0 0 3.333 8.334c0 4.583 6.667 10 6.667 10s6.667-5.417 6.667-10A6.667 6.667 0 0 0 10 1.667Zm0 9.167a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <div>
+                            <strong class="dato-tit">Ubicación</strong>
+                            <span class="dato-val">Carrera 20 # 161 - 36, Toberín • Bogotá D.C., Colombia</span>
+                        </div>
+                    </div>
+
+                    <div class="dato-item">
+                        <span class="dato-ico" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.333 3.333h3.334l1.666 4.167-2.083 1.25a9.167 9.167 0 0 0 5 5l1.25-2.083 4.167 1.666v3.334A1.667 1.667 0 0 1 15 18.333C7.625 18.333 1.667 12.375 1.667 5A1.667 1.667 0 0 1 3.333 3.333Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <div>
+                            <strong class="dato-tit">Teléfono / WhatsApp</strong>
+                            <a href="tel:+573132566705" class="dato-val dato-link">+57 313 256 6705</a>
+                        </div>
+                    </div>
+
+                    <div class="dato-item">
+                        <span class="dato-ico" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="1.667" y="4.167" width="16.667" height="11.667" rx="1.5" stroke="currentColor" stroke-width="1.25"/>
+                                <path d="M1.667 7.5 10 12.5l8.333-5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <div>
+                            <strong class="dato-tit">Correo</strong>
+                            <a href="pisosypasos@gmail.com" class="dato-val dato-link">
+                                pisosypasos@gmail.com
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="dato-item">
+                        <span class="dato-ico" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="10" cy="10" r="8.333" stroke="currentColor" stroke-width="1.25"/>
+                                <path d="M10 5.833V10l3.333 1.667" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <div>
+                            <strong class="dato-tit">Horario de atención</strong>
+                            <span class="dato-val">Lunes – Viernes: 8:00 – 18:00</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+</div><!-- /page-wrapper -->
+</Layout>
+
+
+<!-- ════════════════════════════════════════════════════
+     ESTILOS GLOBALES DE LA PÁGINA
+     No tocan ni Hero.astro ni globals.css.
+     Solo añaden los estilos de las secciones nuevas.
+════════════════════════════════════════════════════ -->
+<style is:global>
+
+/* ── Variables de marca (espejo de globals.css para uso en CSS puro) ── */
+:root {
+    --nogal:       #2D241E;
+    --nogal-medio: #3d2e24;
+    --oro:         #C9A84C;
+    --oro-claro:   #e8d49e;
+    --crema:       #fdfcfb;
+    --slate-600:   #475569;
+    --slate-500:   #64748b;
+    --slate-300:   #cbd5e1;
+}
+
+/* ── Scroll reveal — clase compartida por todas las secciones ── */
+.anim-reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition:
+        opacity  .85s cubic-bezier(.16, 1, .3, 1) var(--anim-delay, 0s),
+        transform .85s cubic-bezier(.16, 1, .3, 1) var(--anim-delay, 0s);
+}
+.anim-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── Parallax ── */
+.parallax { will-change: transform; transform: translate3d(0,0,0); }
+
+/* ── Btn premium (ya definido en globals.css vía Tailwind) ── */
+.btn-premium { position: relative; overflow: hidden; }
+.btn-premium::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -100%;
+    width: 50%; height: 300%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.4), transparent);
+    transition: left .7s;
+}
+.btn-premium:hover::after { left: 150%; }
+
+
+/* ════════════════════════════════════════
+   PAGE WRAPPER
+════════════════════════════════════════ */
+.page-wrapper {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 80px rgba(0,0,0,.08);
+    overflow: hidden;
+}
+
+/* ════════════════════════════════════════
+   BANDA DE CIFRAS
+════════════════════════════════════════ */
+.cifras-wrapper {
+    position: relative;
+    z-index: 30;
+    padding: 0 1.5rem;
+}
+
+.cifras-band {
+    max-width: 64rem;
+    margin: -4rem auto 0;
+    background: rgba(45, 36, 30, 0.96);
+    backdrop-filter: blur(24px);
+    color: white;
+    padding: 2rem 3rem;
+    box-shadow: 0 16px 48px rgba(0,0,0,.25);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+    border: 1px solid rgba(255,255,255,.1);
+    border-bottom: 4px solid var(--oro);
+}
+
+.cifra-item { text-align: center; }
+
+.cifra-numero {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--oro);
+    margin-bottom: .3rem;
+    transition: transform .3s;
+}
+
+.cifra-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3em;
+    color: var(--slate-300);
+}
+
+/* Variante de cifra para "Nacional" — sin número grande, con ícono */
+.cifra-item--cobertura {
+    gap: .4rem;
+}
+
+.cifra-cobertura-ico {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    color: var(--oro);
+    margin: 0 auto .15rem;
+}
+.cifra-cobertura-ico svg { width: 100%; height: 100%; }
+
+.cifra-numero--cobertura {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.cifra-sep {
+    width: 1px;
+    height: 3rem;
+    background: rgba(255,255,255,.1);
+    display: none;
+}
+@media (min-width: 768px) { .cifra-sep { display: block; } }
+
+
+/* ════════════════════════════════════════
+   TOKENS TIPOGRÁFICOS COMPARTIDOS
+════════════════════════════════════════ */
+.sec-eyebrow {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .4em;
+    color: var(--oro);
+    margin-bottom: 1.25rem;
+}
+.sec-eyebrow--claro { color: var(--oro-claro); }
+
+.sec-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 900;
+    color: var(--nogal);
+    letter-spacing: -.03em;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+}
+.sec-h2--claro { color: white; }
+
+.sec-h2-light {
+    font-weight: 300;
+    font-style: italic;
+    color: var(--nogal);
+}
+.sec-h2-light--oro { color: var(--oro); }
+
+.sec-divider {
+    width: 3rem;
+    height: 2px;
+    background: var(--oro);
+    margin-bottom: 2rem;
+}
+
+.sec-p {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.0625rem;
+    color: var(--slate-600);
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+    transition-delay: var(--anim-delay, 0s);
+}
+
+
+/* ════════════════════════════════════════
+   SECCIÓN SOBRE NOSOTROS
+════════════════════════════════════════ */
+.sobre-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    padding: 6rem 2rem 7rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+}
+@media (min-width: 900px) {
+    .sobre-section {
+        grid-template-columns: 1fr 1fr;
+        padding: 8rem 3rem 9rem;
+    }
+}
+
+.sobre-lista {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .9375rem;
+    color: var(--slate-600);
+    transition-delay: var(--anim-delay, 0s);
+}
+.sobre-lista li { display: flex; gap: .75rem; align-items: baseline; }
+.lista-ico { color: var(--oro); font-weight: 700; flex-shrink: 0; }
+
+.sobre-imagen { position: relative; }
+
+.sobre-img-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    max-height: 600px;
+}
+
+.sobre-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(.92) saturate(.9);
+    transition: transform .8s cubic-bezier(.16,1,.3,1), filter .5s;
+}
+.sobre-img-frame:hover .sobre-img {
+    transform: scale(1.04);
+    filter: brightness(.85) saturate(1.05);
+}
+
+/* Filete decorativo oro en la esquina inferior izquierda */
+.sobre-img-deco {
+    position: absolute;
+    bottom: -1rem;
+    left: -1rem;
+    width: 5rem;
+    height: 5rem;
+    border-left: 3px solid var(--oro);
+    border-bottom: 3px solid var(--oro);
+    pointer-events: none;
+}
+
+/* Tarjeta flotante de dato clave */
+.sobre-dato-flotante {
+    position: absolute;
+    top: 2rem;
+    right: -1.25rem;
+    background: var(--nogal);
+    color: white;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,.2);
+    max-width: 9rem;
+}
+.dato-flotante-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--oro);
+    line-height: 1;
+}
+.dato-flotante-txt {
+    font-family: 'Inter', sans-serif;
+    font-size: .7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: rgba(255,255,255,.6);
+    line-height: 1.4;
+}
+
+
+/* ════════════════════════════════════════
+   SECCIÓN SERVICIOS
+════════════════════════════════════════ */
+.servicios-section {
+    background: var(--nogal);
+    padding: 7rem 2rem 6rem;
+}
+@media (min-width: 900px) { .servicios-section { padding: 8rem 3rem 7rem; } }
+
+.servicios-header {
+    max-width: 48rem;
+    margin: 0 auto 5rem;
+    text-align: center;
+}
+
+.servicios-intro {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: rgba(255,255,255,.55);
+    line-height: 1.7;
+    margin-top: 1.5rem;
+}
+
+.servicios-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5px; /* separación mínima entre tarjetas — línea nogal */
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255,255,255,.06); /* relleno del gap */
+}
+@media (min-width: 640px)  { .servicios-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .servicios-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.serv-card {
+    background: var(--nogal);
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: background .25s;
+}
+.serv-card:hover { background: var(--nogal-medio); }
+
+.serv-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--oro);
+}
+.serv-icon svg { width: 100%; height: 100%; }
+
+.serv-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -.01em;
+    line-height: 1.25;
+}
+
+.serv-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: .875rem;
+    color: rgba(255,255,255,.55);
+    line-height: 1.7;
+    flex: 1;
+}
+
+.serv-normativa {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: var(--oro);
+    border-top: 1px solid rgba(201,168,76,.25);
+    padding-top: .75rem;
+    margin-top: auto;
+}
+
+.servicios-cta {
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.btn-servicios-sec {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: .8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: var(--oro);
+    border: 1px solid rgba(201,168,76,.35);
+    padding: .85rem 2.5rem;
+    text-decoration: none;
+    transition: background .2s, color .2s;
+}
+.btn-servicios-sec:hover {
+    background: var(--oro);
+    color: var(--nogal);
+}
+
+
+/* ════════════════════════════════════════
+   SECCIÓN GARANTÍA
+════════════════════════════════════════ */
+.garantia-section {
+    background: var(--crema);
+    display: flex;
+    gap: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Franja lateral vertical (desktop) */
+.garantia-franja {
+    display: none;
+    width: 3rem;
+    background: var(--nogal);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+@media (min-width: 900px) { .garantia-franja { display: block; } }
+
+.garantia-franja-txt {
+    position: absolute;
+    bottom: 4rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(-90deg);
+    transform-origin: center;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    font-size: .55rem;
+    font-weight: 700;
+    letter-spacing: .45em;
+    text-transform: uppercase;
+    color: rgba(201,168,76,.5);
+}
+
+.garantia-contenido {
+    flex: 1;
+    padding: 7rem 2rem 7rem 2.5rem;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+@media (min-width: 900px) { .garantia-contenido { padding: 8rem 3.5rem 8rem 3rem; } }
+
+.garantia-header { margin-bottom: 4.5rem; }
+
+/* Pilares de garantía */
+.garantia-pilares {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin-bottom: 5rem;
+}
+@media (min-width: 768px) { .garantia-pilares { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; } }
+
+.pilar-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(201,168,76,.15);
+    line-height: 1;
+    margin-bottom: .75rem;
+}
+
+.pilar-linea {
+    width: 2rem;
+    height: 2px;
+    background: var(--oro);
+    margin-bottom: 1.25rem;
+}
+
+.pilar-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--nogal);
+    font-style: italic;
+    margin-bottom: .75rem;
+}
+
+.pilar-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: .875rem;
+    color: var(--slate-600);
+    line-height: 1.75;
+}
+
+/* Pilar de cobertura: grid de 4 columnas en desktop */
+@media (min-width: 768px) {
+    .garantia-pilares { grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+}
+
+/* Ícono del mapa Colombia en el pilar */
+.pilar-mapa-ico {
+    display: flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--oro);
+    margin-bottom: .5rem;
+}
+.pilar-mapa-ico svg { width: 100%; height: 100%; }
+
+/* Proceso de 4 pasos */
+.proceso-wrapper {
+    border-top: 1px solid rgba(45,36,30,.1);
+    padding-top: 3.5rem;
+}
+
+.proceso-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--nogal);
+    margin-bottom: 2rem;
+}
+
+.proceso-pasos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.paso {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+.paso-num {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--nogal);
+    color: var(--oro);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.paso-tit {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: .875rem;
+    font-weight: 700;
+    color: var(--nogal);
+    margin-bottom: .25rem;
+}
+
+.paso-txt {
+    font-family: 'Inter', sans-serif;
+    font-size: .8125rem;
+    color: var(--slate-500);
+    line-height: 1.65;
+}
+
+
+/* ════════════════════════════════════════
+   SECCIÓN CONTACTO / CTA FINAL
+════════════════════════════════════════ */
+.contacto-section {
+    position: relative;
+    background: var(--nogal);
+    overflow: hidden;
+    padding: 7rem 2rem 5rem;
+}
+@media (min-width: 900px) { .contacto-section { padding: 8rem 3rem 6rem; } }
+
+/* Textura de madera estática de fondo (sin animación) */
+.contacto-bg-texture {
+    position: absolute;
+    inset: 0;
+    background-image: url('/imagenes/maderas-textura-2.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: .07;
+    pointer-events: none;
+}
+
+/* Overlay de color sobre la textura */
+.contacto-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(45,36,30,.97) 0%, rgba(45,36,30,.88) 100%);
+    pointer-events: none;
+}
+
+.contacto-contenido {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.contacto-h2 { margin-bottom: .75rem; }
+
+.contacto-eslogan {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: rgba(201,168,76,.6);
+    margin-bottom: 4rem;
+}
+
+.contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    margin-top: 1rem;
+}
+@media (min-width: 768px) {
+    .contacto-grid {
+        grid-template-columns: 1.1fr 1fr;
+        gap: 5rem;
+        align-items: start;
+    }
+}
+
+.contacto-cta-intro {
+    font-family: 'Inter', sans-serif;
+    font-size: .9375rem;
+    color: rgba(255,255,255,.55);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+}
+
+/* Botón WhatsApp primario */
+.btn-contacto-wa {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    background: var(--oro);
+    color: var(--nogal);
+    font-family: 'Inter', sans-serif;
+    font-size: .875rem;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    transition: background .2s, color .2s;
+    margin-bottom: 1rem;
+}
+.btn-contacto-wa svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+}
+.btn-contacto-wa:hover {
+    background: white;
+    color: var(--nogal);
+}
+/* Efecto de barrido de luz */
+.btn-contacto-wa::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -100%;
+    width: 50%; height: 300%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+    transition: left .6s;
+}
+.btn-contacto-wa:hover::after { left: 150%; }
+
+/* Botón secundario: galería */
+.btn-contacto-sec {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: .8125rem;
+    font-weight: 600;
+    color: rgba(255,255,255,.5);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,.2);
+    padding-bottom: 2px;
+    transition: color .2s, border-color .2s;
+    margin-bottom: 2rem;
+}
+.btn-contacto-sec:hover {
+    color: var(--oro);
+    border-color: var(--oro);
+}
+
+.contacto-micro {
+    font-family: 'Inter', sans-serif;
+    font-size: .7rem;
+    letter-spacing: .08em;
+    color: rgba(255,255,255,.25);
+}
+
+/* Datos de contacto */
+.contacto-datos {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    padding-top: .5rem;
+}
+
+.dato-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.dato-ico {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--oro);
+    flex-shrink: 0;
+    margin-top: .15rem;
+}
+.dato-ico svg { width: 100%; height: 100%; }
+
+.dato-tit {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: rgba(255,255,255,.35);
+    margin-bottom: .2rem;
+}
+
+.dato-val {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: .9375rem;
+    color: rgba(255,255,255,.75);
+}
+
+.dato-link {
+    text-decoration: none;
+    transition: color .2s;
+}
+.dato-link:hover { color: var(--oro); }
+
+body { background: #f1f1f1; -webkit-font-smoothing: antialiased; }
+h1,h2,h3,h4 { text-wrap: balance; }
+
+</style>
+
+
+<script>
+/* ════════════════════════════════════════
+   SCROLL REVEAL — IntersectionObserver
+   Activa .visible en .anim-reveal cuando el
+   elemento entra en el viewport.
+════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", () => {
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".anim-reveal")
+            .forEach(el => observer.observe(el));
+
+    /* ── Parallax suave en la banda de cifras ── */
+    const parallaxEls = document.querySelectorAll<HTMLElement>(".parallax");
+    let ticking = false;
+
+    function updateParallax() {
+        const y = window.scrollY;
+        parallaxEls.forEach(el => {
+            const speed = parseFloat(el.dataset.speed ?? "0.08");
+            el.style.transform = `translate3d(0, ${y * speed}px, 0)`;
+        });
+        ticking = false;
+    }
+
+    window.addEventListener("scroll", () => {
+        if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    });
+
+});
+</script>

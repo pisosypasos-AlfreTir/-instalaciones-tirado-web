@@ -1,0 +1,143 @@
+---
+// src/components/Footer.astro
+const currentYear = new Date().getFullYear();
+---
+<footer class="footer">
+    <div class="footer-grid">
+
+        <div>
+            <h3 class="footer-heading">Instalaciones Tirado S.A.S</h3>
+            <p class="footer-tagline">Calidad que se siente, confianza que perdura.</p>
+            <p class="footer-cobertura">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M8 1.5A5.5 5.5 0 0 0 2.5 7c0 3.75 5.5 7.5 5.5 7.5S13.5 10.75 13.5 7A5.5 5.5 0 0 0 8 1.5Zm0 7.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"
+                          stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                </svg>
+                Cobertura nacional · Colombia
+            </p>
+        </div>
+
+        <div>
+            <h3 class="footer-heading">Contacto</h3>
+            <p>Email: <a href="pisosypasos@gmail.com" class="footer-link">pisosypasos@gmail.com</a></p>
+            <p>Teléfono: <a href="tel:+573132566705" class="footer-link">+57 313 256 6705</a></p>
+            <p>Lunes a Viernes: 8:00 – 18:00</p>
+        </div>
+
+        <div>
+            <h3 class="footer-heading">Navegación</h3>
+            <ul class="footer-nav">
+                <li><a href="/" class="footer-link">Inicio</a></li>
+                <li><a href="/servicios" class="footer-link">Servicios</a></li>
+                <li><a href="/contacto" class="footer-link">Contacto</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <span>&copy; {currentYear} Instalaciones Tirado S.A.S. Todos los derechos reservados.</span>
+        <span class="footer-bottom-sep" aria-hidden="true">&nbsp;·&nbsp;</span>
+        <span class="footer-bottom-cobertura">Cobertura nacional · Colombia</span>
+    </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: #2D241E; /* nogal — coherente con el header */
+    color: rgba(255, 255, 255, 0.55);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+  }
+
+  .footer-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2.5rem;
+    padding: 3.5rem 2rem 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .footer-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .footer-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .footer-tagline {
+    font-style: italic;
+    color: #C9A84C; /* oro-premium */
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .footer-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .footer-link {
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-link:hover {
+    color: #C9A84C; /* oro-premium */
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    padding: 1.25rem 2rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+  }
+
+  .footer-bottom-sep {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .footer-bottom-cobertura {
+    color: rgba(201, 168, 76, 0.55);
+    font-weight: 600;
+    letter-spacing: .04em;
+  }
+
+  .footer-cobertura {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: .6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(201, 168, 76, 0.7);
+    letter-spacing: .04em;
+  }
+
+  .footer-cobertura svg {
+    width: 13px;
+    height: 13px;
+    color: rgba(201, 168, 76, 0.7);
+    flex-shrink: 0;
+  }
+</style>

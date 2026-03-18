@@ -1,0 +1,593 @@
+---
+// src/pages/servicios.astro
+import Layout from '../layouts/Layout.astro';
+import servicios from '../data/servicios.json';
+
+// Servicio principal: primer item con destacado:true
+const hero = servicios.find(s => s.destacado) ?? servicios[0];
+
+// Resto: todos menos el hero, limitado a 5 para el mosaico
+const resto = servicios.filter(s => s.id !== hero.id);
+const mosaico = resto.slice(0, 5);
+
+// Fila extra: los que no caben en el mosaico principal
+const extra = resto.slice(5);
+
+// Categorías para los filtros
+const categorias = ['Todos', ...new Set(servicios.map(s => s.categoria))];
+---
+
+<Layout title="Servicios — Maderas Macizas y Carpintería de Autor">
+
+<div class="pagina">
+
+  <!-- ── Encabezado ── -->
+  <div class="encabezado">
+    <div>
+      <span class="eyebrow">Catálogo completo</span>
+      <h1 class="titulo">Nuestros Servicios</h1>
+      <div class="titulo-linea"></div>
+    </div>
+    <div class="filtros-wrap" id="filtros">
+      {categorias.map(cat => (
+        <button class={`filtro${cat === 'Todos' ? ' activo' : ''}`} data-cat={cat}>
+          {cat}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- ── Mosaico principal ── -->
+  <div class="mosaico" id="mosaico">
+
+    <!-- BLOQUE HERO -->
+    <div class="bloque bloque-hero" data-cat={hero.categoria}>
+      <a href={`/servicios/${hero.id}`} class="tarjeta">
+        <div class="tarjeta-bg"></div>
+        <img class="tarjeta-img" src={hero.imagen} alt={hero.nombre} loading="eager" />
+        <div class="tarjeta-overlay"></div>
+        <span class="badge-hero">★ Servicio principal</span>
+        <div class="tarjeta-contenido">
+          <span class="tarjeta-cat">{hero.categoria}</span>
+          <span class="tarjeta-nombre tarjeta-nombre--grande">{hero.nombre}</span>
+          <p class="tarjeta-desc">{hero.descripcion_corta}</p>
+          <span class="tarjeta-cta tarjeta-cta--hero">Ver detalle →</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- BLOQUES DEL MOSAICO (filas derechas) -->
+    {mosaico.map((s, i) => (
+      <div class={`bloque bloque-${i + 2}`} data-cat={s.categoria}>
+        <a href={`/servicios/${s.id}`} class="tarjeta">
+          <div class="tarjeta-bg"></div>
+          <img class="tarjeta-img" src={s.imagen} alt={s.nombre} loading="lazy" />
+          <div class="tarjeta-overlay"></div>
+          <div class="tarjeta-contenido">
+            <span class="tarjeta-cat">{s.categoria}</span>
+            <span class="tarjeta-nombre">{s.nombre}</span>
+            <span class="tarjeta-cta">Ver →</span>
+          </div>
+        </a>
+      </div>
+    ))}
+
+  </div>
+
+  <!-- ── Fila extra (servicios que superan los 6 del mosaico) ── -->
+  {extra.length > 0 && (
+    <div class="fila-extra" id="fila-extra">
+      {extra.map(s => (
+        <div data-cat={s.categoria}>
+          <a href={`/servicios/${s.id}`} class="tarjeta tarjeta--mini">
+            <div class="tarjeta-bg"></div>
+            <img class="tarjeta-img" src={s.imagen} alt={s.nombre} loading="lazy" />
+            <div class="tarjeta-overlay"></div>
+            <div class="tarjeta-contenido tarjeta-contenido--mini">
+              <span class="tarjeta-cat">{s.categoria}</span>
+              <span class="tarjeta-nombre tarjeta-nombre--mini">{s.nombre}</span>
+              <span class="tarjeta-cta">Ver →</span>
+            </div>
+          </a>
+        </div>
+      ))}
+    </div>
+  )}
+
+</div>
+</Layout>
+
+<style>
+/* ── Variables locales (espejo de globals) ── */
+:root {
+  --nogal: #2D241E;
+  --oro: #C9A84C;
+  --oro-light: #e8d49e;
+}
+
+/* ── Página ── */
+.pagina {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 5rem;
+  background: #f7f4f0;
+  min-height: 100vh;
+}
+
+/* ── Encabezado ── */
+.encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.eyebrow {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: var(--oro);
+  margin-bottom: .5rem;
+}
+
+.titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: var(--nogal);
+  letter-spacing: -.03em;
+  line-height: 1;
+  /* Anula el h1 global de globals.css si hace falta */
+  text-wrap: balance;
+}
+
+.titulo-linea {
+  width: 2.5rem;
+  height: 2px;
+  background: var(--oro);
+  margin-top: .75rem;
+}
+
+/* ── Filtros ── */
+.filtros-wrap {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.filtro {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: .4rem 1rem;
+  border: 1px solid rgba(45, 36, 30, .2);
+  background: transparent;
+  color: rgba(45, 36, 30, .5);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.filtro:hover,
+.filtro.activo {
+  background: var(--nogal);
+  color: white;
+  border-color: var(--nogal);
+}
+
+/* ═══════════════════════════════════════════
+   MOSAICO — Grid asimétrico tipo Bento
+   12 columnas × 2 filas
+═══════════════════════════════════════════ */
+.mosaico {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 290px 230px;
+  gap: 10px;
+}
+
+/* Hero: 5 columnas × 2 filas (pieza dominante) */
+.bloque-hero { grid-column: 1 / 6;  grid-row: 1 / 3; }
+
+/* Fila 1 — derecha */
+.bloque-2    { grid-column: 6  / 9;  grid-row: 1 / 2; }
+.bloque-3    { grid-column: 9  / 13; grid-row: 1 / 2; }
+
+/* Fila 2 — derecha */
+.bloque-4    { grid-column: 6  / 8;  grid-row: 2 / 3; }
+.bloque-5    { grid-column: 8  / 11; grid-row: 2 / 3; }
+.bloque-6    { grid-column: 11 / 13; grid-row: 2 / 3; }
+
+/* ── Fila extra ── */
+.fila-extra {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* ═══════════════════════════════════════════
+   TARJETA
+═══════════════════════════════════════════ */
+.tarjeta {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  transition: transform .4s cubic-bezier(.16, 1, .3, 1),
+              box-shadow .4s;
+}
+
+.tarjeta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 48px rgba(45, 36, 30, .2);
+  z-index: 2;
+}
+
+/* Fallback de color */
+.tarjeta-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--nogal);
+}
+
+/* Imagen */
+.tarjeta-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .7s cubic-bezier(.16, 1, .3, 1);
+  filter: brightness(.7) saturate(.9);
+}
+
+.tarjeta:hover .tarjeta-img {
+  transform: scale(1.06);
+  filter: brightness(.6) saturate(1.1);
+}
+
+/* Overlay */
+.tarjeta-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(18, 10, 6, .9) 0%,
+    rgba(18, 10, 6, .38) 45%,
+    transparent 100%
+  );
+}
+
+.bloque-hero .tarjeta-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(18, 10, 6, .94) 0%,
+    rgba(18, 10, 6, .5) 50%,
+    transparent 100%
+  );
+}
+
+/* Contenido */
+.tarjeta-contenido {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.1rem 1.1rem 1rem;
+}
+
+.tarjeta-contenido--mini {
+  padding: .75rem .9rem .7rem;
+}
+
+/* Categoría */
+.tarjeta-cat {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--oro-light);
+  margin-bottom: .35rem;
+}
+
+/* Nombre */
+.tarjeta-nombre {
+  font-family: 'Playfair Display', serif;
+  font-size: .95rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+  display: block;
+}
+
+.tarjeta-nombre--grande {
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+}
+
+.tarjeta-nombre--mini {
+  font-size: .875rem;
+}
+
+/* Descripción (visible solo en hero y móvil) */
+.tarjeta-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: .85rem;
+  color: rgba(255, 255, 255, .68);
+  margin-top: .5rem;
+  line-height: 1.5;
+  max-width: 340px;
+  display: none;
+}
+
+.bloque-hero .tarjeta-desc {
+  display: block;
+}
+
+/* CTA */
+.tarjeta-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin-top: .7rem;
+  font-family: 'Inter', sans-serif;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--oro-light);
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity .25s, transform .25s;
+}
+
+.tarjeta:hover .tarjeta-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* CTA especial del hero (siempre visible) */
+.tarjeta-cta--hero {
+  opacity: 1 !important;
+  transform: none !important;
+  color: var(--nogal);
+  background: var(--oro);
+  padding: .5rem 1rem .5rem .85rem;
+  border-radius: 2px;
+  margin-top: 1rem;
+  transition: background .2s, color .2s;
+}
+
+.tarjeta-cta--hero:hover {
+  background: white;
+}
+
+/* Badge */
+.badge-hero {
+  position: absolute;
+  top: 1.1rem;
+  left: 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--nogal);
+  background: var(--oro);
+  padding: .3rem .7rem;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+/* Tarjeta mini */
+.tarjeta--mini {
+  height: 140px;
+}
+
+/* ═══════════════════════════════════════════
+   MODO FILTRADO
+   Cuando hay un filtro activo distinto de "Todos",
+   el mosaico Bento cambia a un grid uniforme simple
+   para que los bloques visibles se reordenen solos.
+═══════════════════════════════════════════ */
+.mosaico--filtrado {
+  /* Sobreescribe el grid Bento por uno uniforme */
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  grid-template-rows: auto !important;
+  gap: 10px !important;
+}
+
+/* En modo filtrado todos los bloques tienen altura fija y
+   ocupan una sola celda (anula los grid-column/grid-row del Bento) */
+.mosaico--filtrado .bloque {
+  grid-column: auto !important;
+  grid-row: auto !important;
+}
+.mosaico--filtrado .bloque .tarjeta {
+  height: 260px !important;
+}
+
+/* ── Animación de entrada al filtrar ── */
+@keyframes filtro-aparece {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+
+.filtro-entra {
+  animation: filtro-aparece .35s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+
+/* Tablet (640 – 1023px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .mosaico {
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 260px 200px;
+  }
+
+  .bloque-hero { grid-column: 1 / 5; grid-row: 1 / 3; }
+  .bloque-2    { grid-column: 5 / 7; grid-row: 1 / 2; }
+  .bloque-3    { grid-column: 7 / 9; grid-row: 1 / 2; }
+  .bloque-4    { grid-column: 5 / 7; grid-row: 2 / 3; }
+  .bloque-5    { grid-column: 7 / 9; grid-row: 2 / 3; }
+  .bloque-6    { display: none; } /* Se mueve a fila-extra en tablet */
+}
+
+/* Móvil (< 640px): lista vertical limpia */
+@media (max-width: 639px) {
+
+  /* El mosaico se convierte en una lista vertical */
+  .mosaico {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Hero: prominente al principio */
+  .bloque-hero { order: 0; }
+  .bloque-hero .tarjeta { height: 360px; }
+
+  /* Bloques secundarios: altura fija uniforme */
+  .bloque-2 .tarjeta,
+  .bloque-3 .tarjeta,
+  .bloque-4 .tarjeta,
+  .bloque-5 .tarjeta,
+  .bloque-6 .tarjeta { height: 175px; }
+
+  /* Descripción y CTA siempre visibles en móvil */
+  .tarjeta-desc { display: block !important; }
+  .tarjeta-cta {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .tarjeta-nombre--grande { font-size: 1.45rem; }
+
+  .fila-extra {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+</style>
+
+<script>
+/* ══════════════════════════════════════════════
+   FILTROS — servicios.astro
+   
+   Lógica:
+   - "Todos"       → restaura el grid Bento original,
+                     muestra todos los bloques
+   - Categoría     → cambia el mosaico a grid simple
+                     (auto-fill) y oculta los que no
+                     corresponden con display:none
+   - Re-clic en la categoría activa → equivale a "Todos"
+   
+   La transición de entrada usa la clase CSS .filtro-entra
+   definida abajo para evitar parpadeos bruscos.
+══════════════════════════════════════════════ */
+(function () {
+
+    const filtrosEl  = document.getElementById('filtros') as HTMLElement | null;
+    const botones    = filtrosEl?.querySelectorAll<HTMLButtonElement>('.filtro');
+    const mosaico    = document.getElementById('mosaico')   as HTMLElement | null;
+    const filaExtra  = document.getElementById('fila-extra') as HTMLElement | null;
+
+    if (!filtrosEl || !mosaico) return;
+
+    /* Todos los bloques con data-cat (mosaico + fila extra) */
+    const bloques = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-cat]')
+    );
+
+    /* Estado actual */
+    let catActiva = 'Todos';
+
+    /* ── Aplica un filtro ── */
+    function aplicar(cat: string): void {
+        catActiva = cat;
+
+        /* 1. Marca el botón activo */
+        botones?.forEach(b => {
+            b.classList.toggle('activo', b.dataset.cat === cat);
+        });
+
+        if (cat === 'Todos') {
+            /* 2a. Modo BENTO: restaurar el grid original */
+            mosaico.classList.remove('mosaico--filtrado');
+            if (filaExtra) filaExtra.style.display = '';
+
+            bloques.forEach(el => {
+                el.style.display = '';
+                /* Pequeña animación de entrada */
+                el.classList.remove('filtro-entra');
+                void (el as HTMLElement).offsetWidth; /* fuerza reflow */
+                el.classList.add('filtro-entra');
+            });
+
+        } else {
+            /* 2b. Modo FILTRADO: grid simple, ocultar los que no coinciden */
+            mosaico.classList.add('mosaico--filtrado');
+
+            bloques.forEach(el => {
+                const match = el.dataset.cat === cat;
+
+                if (match) {
+                    el.style.display = '';
+                    el.classList.remove('filtro-entra');
+                    void (el as HTMLElement).offsetWidth;
+                    el.classList.add('filtro-entra');
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+
+            /* Ocultar la fila extra si ninguno de sus items coincide */
+            if (filaExtra) {
+                const hayExtra = Array.from(
+                    filaExtra.querySelectorAll<HTMLElement>('[data-cat]')
+                ).some(el => el.dataset.cat === cat);
+                filaExtra.style.display = hayExtra ? '' : 'none';
+            }
+        }
+    }
+
+    /* ── Listener único en el contenedor (delegación) ── */
+    filtrosEl.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filtro');
+        if (!btn) return;
+
+        const cat = btn.dataset.cat ?? 'Todos';
+
+        /* Re-clic en la categoría activa → volver a Todos */
+        if (cat === catActiva && cat !== 'Todos') {
+            aplicar('Todos');
+            /* Marcar "Todos" como activo */
+            botones?.forEach(b => {
+                b.classList.toggle('activo', b.dataset.cat === 'Todos');
+            });
+        } else {
+            aplicar(cat);
+        }
+    });
+
+    /* Estado inicial */
+    aplicar('Todos');
+
+})();
+</script>

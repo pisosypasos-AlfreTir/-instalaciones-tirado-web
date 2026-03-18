@@ -1,0 +1,854 @@
+---
+// src/pages/servicios/[id].astro
+// Vista de detalle de servicio.
+// Lee los campos enriquecidos de servicios.json:
+//   ficha_tecnica[]  → array de { atributo, valor }
+//   criterio_calidad → string con el estándar de ejecución
+//   normativa        → string con referencias normativas
+import Layout from '../../layouts/Layout.astro';
+import TarjetaServicio from '../../components/TarjetaServicio.astro';
+import servicios from '../../data/servicios.json';
+
+export async function getStaticPaths() {
+    return servicios.map(servicio => ({
+        params: { id: servicio.id },
+        props:  { servicio },
+    }));
+}
+
+const { servicio } = Astro.props;
+
+// Servicios relacionados: misma categoría, distinto id, máximo 3
+const relacionados = servicios
+    .filter(s => s.categoria === servicio.categoria && s.id !== servicio.id)
+    .slice(0, 3);
+
+// Mensaje WhatsApp pre-escrito con nombre del servicio
+const msgWA      = encodeURIComponent(
+    `Hola, me gustaría solicitar información sobre el servicio: ${servicio.nombre}`
+);
+const enlaceWA   = `https://wa.me/573132566705?text=${msgWA}`;
+
+// Breadcrumb label
+const categoriaSlug = servicio.categoria.toLowerCase();
+---
+
+<Layout title={`${servicio.nombre} — Instalaciones Tirado S.A.S`}>
+
+<div class="det-page">
+
+    <!-- ══════════════════════════════════════
+         BREADCRUMB
+    ══════════════════════════════════════ -->
+    <nav class="det-breadcrumb" aria-label="Ruta de navegación">
+        <a href="/" class="det-bc-link">Inicio</a>
+        <span class="det-bc-sep" aria-hidden="true">/</span>
+        <a href="/servicios" class="det-bc-link">Servicios</a>
+        <span class="det-bc-sep" aria-hidden="true">/</span>
+        <span class="det-bc-current" aria-current="page">{servicio.nombre}</span>
+    </nav>
+
+
+    <!-- ══════════════════════════════════════
+         BLOQUE PRINCIPAL: imagen 60% + ficha 40%
+    ══════════════════════════════════════ -->
+    <section class="det-hero">
+
+        <!-- ── Columna imagen (60%) ── -->
+        <div class="det-img-col">
+
+            <div class="det-img-frame">
+                <img
+                    src={servicio.imagen}
+                    alt={`${servicio.nombre} — trabajo finalizado por Instalaciones Tirado S.A.S`}
+                    class="det-img"
+                    loading="eager"
+                />
+
+                <!-- Badge de categoría flotante sobre la imagen -->
+                <span class="det-cat-badge">
+                    {servicio.categoria}
+                </span>
+
+                <!-- Filete decorativo oro — esquina inferior derecha -->
+                <div class="det-img-deco" aria-hidden="true"></div>
+            </div>
+
+            <!-- Micro-dato bajo la imagen: normativa de referencia -->
+            {servicio.normativa && (
+                <p class="det-normativa-ref">
+                    <span class="det-normativa-ico" aria-hidden="true">
+                        <!-- Icono escudo/normativa SVG inline -->
+                        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 1.5 L14 3.5 L14 8 C14 11.5 11 14 8 14.5 C5 14 2 11.5 2 8 L2 3.5 Z"
+                                  stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+                            <path d="M5.5 8 L7.5 10 L10.5 6.5"
+                                  stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    Normativa aplicable: {servicio.normativa}
+                </p>
+            )}
+
+        </div>
+
+
+        <!-- ── Columna ficha técnica (40%) ── -->
+        <div class="det-ficha-col">
+
+            <!-- Eyebrow -->
+            <span class="det-eyebrow">{servicio.categoria}</span>
+
+            <!-- Título principal -->
+            <h1 class="det-titulo">{servicio.nombre}</h1>
+
+            <!-- Divisor oro -->
+            <div class="det-divisor" aria-hidden="true"></div>
+
+            <!-- Descripción técnica -->
+            <p class="det-descripcion">{servicio.descripcion_larga}</p>
+
+
+            <!-- ── Ficha técnica ── -->
+            {servicio.ficha_tecnica && servicio.ficha_tecnica.length > 0 && (
+                <div class="det-tabla-wrap">
+                    <h2 class="det-tabla-titulo">Ficha técnica</h2>
+                    <dl class="det-tabla">
+                        {servicio.ficha_tecnica.map((fila: { atributo: string; valor: string }) => (
+                            <div class="det-fila">
+                                <dt class="det-atributo">{fila.atributo}</dt>
+                                <dd class="det-valor">{fila.valor}</dd>
+                            </div>
+                        ))}
+                    </dl>
+                </div>
+            )}
+
+
+            <!-- ── Criterio de calidad ── -->
+            {servicio.criterio_calidad && (
+                <blockquote class="det-criterio">
+                    <span class="det-criterio-ico" aria-hidden="true">
+                        <!-- Icono de verificación -->
+                        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="10" cy="10" r="8.333" stroke="currentColor" stroke-width="1.25"/>
+                            <path d="M6.667 10 L9.167 12.5 L13.333 7.5"
+                                  stroke="currentColor" stroke-width="1.25"
+                                  stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <p class="det-criterio-txt">{servicio.criterio_calidad}</p>
+                    <cite class="det-criterio-fuente">Criterio de ejecución — Instalaciones Tirado S.A.S</cite>
+                </blockquote>
+            )}
+
+
+            <!-- ── CTAs ── -->
+            <div class="det-ctas">
+
+                <!-- Primario: WhatsApp con mensaje pre-escrito -->
+                <a
+                    href={enlaceWA}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="det-btn-wa"
+                    aria-label={`Consultar por WhatsApp sobre ${servicio.nombre}`}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                    </svg>
+                    Solicitar presupuesto por WhatsApp
+                </a>
+
+                <!-- Secundario: volver al catálogo -->
+                <a href="/servicios" class="det-btn-sec">
+                    ← Ver todos los servicios
+                </a>
+
+            </div>
+
+            <!-- Micro-texto de confianza -->
+            <p class="det-micro">
+                Respuesta en menos de 24 h &nbsp;·&nbsp; Visita de medición sin coste
+            </p>
+
+        </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════
+         SERVICIOS RELACIONADOS — Film-strip
+    ══════════════════════════════════════ -->
+    {relacionados.length > 0 && (
+        <section class="rel-section">
+
+            <div class="rel-track-wrap">
+                <ul class="rel-track" id="rel-track" role="list">
+                    {relacionados.map(s => (
+                        <li class="rel-item">
+                            <a href={`/servicios/${s.id}`} class="rel-card">
+
+                                {/* Imagen de fondo */}
+                                <img
+                                    src={s.imagen}
+                                    alt={s.nombre}
+                                    class="rel-card-img"
+                                    loading="lazy"
+                                />
+
+                                {/* Overlay doble: oscuro uniforme + degradado inferior */}
+                                <div class="rel-card-overlay" aria-hidden="true"></div>
+
+                                {/* Texto superpuesto */}
+                                <div class="rel-card-body">
+                                    <span class="rel-card-cat">{s.categoria}</span>
+                                    <h3 class="rel-card-nombre">{s.nombre}</h3>
+                                    <span class="rel-card-ver">VER →</span>
+                                </div>
+
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+
+                {/* Flechas pegadas a los laterales del track */}
+                <button class="rel-flecha rel-flecha--prev" id="rel-prev" aria-label="Anterior">
+                    <svg viewBox="0 0 20 20" fill="none"><path d="M12.5 15 L7.5 10 L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="rel-flecha rel-flecha--next" id="rel-next" aria-label="Siguiente">
+                    <svg viewBox="0 0 20 20" fill="none"><path d="M7.5 5 L12.5 10 L7.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+
+        </section>
+    )}
+
+</div>
+</Layout>
+
+
+<style>
+/* ════════════════════════════════════════
+   VARIABLES — espejo de globals.css
+════════════════════════════════════════ */
+:root {
+    --nogal:     #2D241E;
+    --nogal-m:   #3d2e24;
+    --oro:       #C9A84C;
+    --oro-claro: #e8d49e;
+    --crema:     #fdfcfb;
+    --slate-600: #475569;
+    --slate-500: #64748b;
+    --slate-200: #e2e8f0;
+}
+
+/* ════════════════════════════════════════
+   PÁGINA
+════════════════════════════════════════ */
+.det-page {
+    background: var(--crema);
+    min-height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ════════════════════════════════════════
+   BREADCRUMB
+════════════════════════════════════════ */
+.det-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: 1.5rem 2rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .75rem;
+    flex-wrap: wrap;
+}
+@media (min-width: 900px) { .det-breadcrumb { padding: 2rem 3.5rem; } }
+
+.det-bc-link {
+    color: var(--slate-500);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color .2s;
+}
+.det-bc-link:hover { color: var(--oro); }
+
+.det-bc-sep {
+    color: var(--slate-200);
+    font-weight: 300;
+}
+
+.det-bc-current {
+    color: var(--nogal);
+    font-weight: 600;
+}
+
+/* ════════════════════════════════════════
+   BLOQUE PRINCIPAL — grid 60/40
+════════════════════════════════════════ */
+.det-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    min-height: 90vh;
+    align-items: stretch;
+}
+
+@media (min-width: 900px) {
+    .det-hero {
+        grid-template-columns: 60fr 40fr;
+        min-height: 85vh;
+    }
+}
+
+/* ── Columna imagen ── */
+.det-img-col {
+    display: flex;
+    flex-direction: column;
+    background: var(--nogal);
+}
+
+.det-img-frame {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    min-height: 380px;
+}
+@media (min-width: 900px) { .det-img-frame { min-height: 600px; } }
+
+.det-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* Sin bordes. Sin sombras. El brief lo requiere explícitamente. */
+    filter: brightness(.92) saturate(.95);
+    transition: transform 1.2s cubic-bezier(.16, 1, .3, 1),
+                filter    .6s ease;
+}
+.det-img-frame:hover .det-img {
+    transform: scale(1.04);
+    filter: brightness(.85) saturate(1.05);
+}
+
+/* Badge de categoría flotante */
+.det-cat-badge {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .35em;
+    color: var(--nogal);
+    background: var(--oro);
+    padding: .35rem .9rem;
+    z-index: 2;
+}
+
+/* Filete decorativo oro — esquina inferior derecha */
+.det-img-deco {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 4rem;
+    height: 4rem;
+    border-right: 3px solid var(--oro);
+    border-bottom: 3px solid var(--oro);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Micro-dato de normativa bajo la imagen */
+.det-normativa-ref {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .85rem 1.5rem;
+    background: var(--nogal);
+    font-family: 'Inter', sans-serif;
+    font-size: .7rem;
+    font-weight: 500;
+    letter-spacing: .05em;
+    color: rgba(201, 168, 76, .6);
+    border-top: 1px solid rgba(255,255,255,.06);
+}
+@media (min-width: 900px) { .det-normativa-ref { padding: .85rem 2.5rem; } }
+
+.det-normativa-ico {
+    display: flex;
+    align-items: center;
+    width: 1rem;
+    height: 1rem;
+    color: var(--oro);
+    flex-shrink: 0;
+}
+.det-normativa-ico svg { width: 100%; height: 100%; }
+
+
+/* ── Columna ficha técnica ── */
+.det-ficha-col {
+    background: white;
+    padding: 3rem 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 1px solid var(--slate-200);
+    overflow-y: auto;
+}
+@media (min-width: 900px) {
+    .det-ficha-col {
+        padding: 3.5rem 3rem 4.5rem 3.5rem;
+        position: sticky;
+        top: 0;
+        max-height: 100vh;
+    }
+}
+
+.det-eyebrow {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .4em;
+    color: var(--oro);
+    margin-bottom: 1rem;
+}
+
+.det-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 900;
+    color: var(--nogal);
+    letter-spacing: -.03em;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+}
+
+.det-divisor {
+    width: 2.5rem;
+    height: 2px;
+    background: var(--oro);
+    margin-bottom: 1.5rem;
+    flex-shrink: 0;
+}
+
+.det-descripcion {
+    font-family: 'Inter', sans-serif;
+    font-size: .9375rem;
+    color: var(--slate-600);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+}
+
+
+/* ── Ficha técnica (tabla dl) ── */
+.det-tabla-wrap {
+    margin-bottom: 2rem;
+    border: 1px solid var(--slate-200);
+}
+
+.det-tabla-titulo {
+    font-family: 'Inter', sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .35em;
+    color: var(--nogal);
+    background: #f8f6f3;
+    padding: .65rem 1rem;
+    border-bottom: 1px solid var(--slate-200);
+}
+
+.det-tabla {
+    margin: 0;
+}
+
+.det-fila {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    border-bottom: 1px solid var(--slate-200);
+    transition: background .15s;
+}
+.det-fila:last-child { border-bottom: none; }
+.det-fila:hover { background: #fdfaf6; }
+
+.det-atributo {
+    font-family: 'Inter', sans-serif;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--nogal);
+    padding: .7rem 1rem;
+    background: #f8f6f3;
+    border-right: 1px solid var(--slate-200);
+    display: flex;
+    align-items: center;
+    line-height: 1.4;
+}
+
+.det-valor {
+    font-family: 'Inter', sans-serif;
+    font-size: .8125rem;
+    color: var(--slate-600);
+    padding: .7rem 1rem;
+    letter-spacing: .01em;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+}
+
+
+/* ── Criterio de calidad ── */
+.det-criterio {
+    display: flex;
+    gap: .85rem;
+    align-items: flex-start;
+    background: #fdf9f1;
+    border-left: 3px solid var(--oro);
+    padding: 1.1rem 1.25rem;
+    margin: 0 0 2rem;
+}
+
+.det-criterio-ico {
+    display: flex;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--oro);
+    flex-shrink: 0;
+    margin-top: .1rem;
+}
+.det-criterio-ico svg { width: 100%; height: 100%; }
+
+.det-criterio-txt {
+    font-family: 'Inter', sans-serif;
+    font-size: .8125rem;
+    color: #4a3a28;
+    line-height: 1.65;
+    margin: 0 0 .4rem;
+    font-style: normal;
+}
+
+.det-criterio-fuente {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: var(--oro);
+    font-style: normal;
+}
+
+
+/* ── CTAs ── */
+.det-ctas {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin-bottom: .75rem;
+}
+
+/* Botón WhatsApp primario */
+.det-btn-wa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    background: var(--nogal);
+    color: var(--oro);
+    font-family: 'Inter', sans-serif;
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    border: 2px solid var(--nogal);
+    position: relative;
+    overflow: hidden;
+    transition: background .2s, color .2s;
+}
+.det-btn-wa svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+}
+.det-btn-wa:hover {
+    background: var(--oro);
+    color: var(--nogal);
+    border-color: var(--oro);
+}
+/* Efecto barrido de luz */
+.det-btn-wa::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -100%;
+    width: 50%; height: 300%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.25), transparent);
+    transition: left .6s;
+}
+.det-btn-wa:hover::after { left: 150%; }
+
+/* Botón secundario: volver al catálogo */
+.det-btn-sec {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: .775rem;
+    font-weight: 600;
+    color: var(--slate-500);
+    text-decoration: none;
+    padding: .85rem 1.5rem;
+    border: 1px solid var(--slate-200);
+    transition: border-color .2s, color .2s;
+}
+.det-btn-sec:hover {
+    border-color: var(--nogal);
+    color: var(--nogal);
+}
+
+.det-micro {
+    font-family: 'Inter', sans-serif;
+    font-size: .68rem;
+    letter-spacing: .06em;
+    color: var(--slate-500);
+    text-align: center;
+    margin-top: .25rem;
+}
+
+
+/* ════════════════════════════════════════
+   FILM-STRIP — SERVICIOS RELACIONADOS
+   Tarjetas rectangulares con imagen a full
+   + overlay + texto superpuesto
+════════════════════════════════════════ */
+.rel-section {
+    background: var(--nogal);   /* mismo tono oscuro que el header */
+    border-top: 3px solid rgba(201,168,76,.25);
+    padding: 0;                 /* sin padding: el track llena todo */
+    overflow: hidden;
+    position: relative;
+}
+
+/* ── Wrapper: contiene el track + las flechas superpuestas ── */
+.rel-track-wrap {
+    position: relative;
+}
+
+/* ── Pista de scroll ── */
+.rel-track {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 2px;                   /* separación mínima entre tarjetas = línea de borde */
+}
+.rel-track::-webkit-scrollbar { display: none; }
+
+/* ── Item del film-strip ── */
+.rel-item {
+    flex: 0 0 220px;            /* ancho fijo: mismo en todos */
+    scroll-snap-align: start;
+}
+@media (min-width: 640px)  { .rel-item { flex: 0 0 240px; } }
+@media (min-width: 1024px) { .rel-item { flex: 0 0 260px; } }
+
+/* ── Tarjeta: imagen a full con overlay y texto ── */
+.rel-card {
+    display: block;
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+}
+@media (min-width: 640px)  { .rel-card { height: 190px; } }
+@media (min-width: 1024px) { .rel-card { height: 200px; } }
+
+/* Imagen: cubre todo el espacio */
+.rel-card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s cubic-bezier(.16,1,.3,1),
+                filter    .4s;
+    filter: brightness(.65) saturate(.85);
+}
+.rel-card:hover .rel-card-img {
+    transform: scale(1.07);
+    filter: brightness(.5) saturate(1);
+}
+
+/* Overlay: degradado de abajo hacia arriba */
+.rel-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(18,10,6,.92) 0%,
+        rgba(18,10,6,.4)  50%,
+        rgba(18,10,6,.15) 100%
+    );
+    pointer-events: none;
+}
+
+/* Texto superpuesto: pegado al fondo */
+.rel-card-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: .85rem .9rem .8rem;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+
+/* Categoría */
+.rel-card-cat {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: rgba(201,168,76,.85);   /* oro semitransparente */
+    line-height: 1;
+}
+
+/* Nombre del servicio */
+.rel-card-nombre {
+    font-family: 'Playfair Display', serif;
+    font-size: .875rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+    letter-spacing: -.01em;
+    margin: 0;
+}
+
+/* CTA "VER →": aparece al hover */
+.rel-card-ver {
+    font-family: 'Inter', sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--oro);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .25s, transform .25s;
+    line-height: 1;
+    margin-top: .1rem;
+}
+.rel-card:hover .rel-card-ver {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── Flechas: flotantes sobre el track ── */
+.rel-flecha {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(45,36,30,.75);
+    border: 1px solid rgba(201,168,76,.35);
+    color: var(--oro);
+    cursor: pointer;
+    padding: 0;
+    border-radius: 2px;
+    transition: background .2s, border-color .2s;
+    backdrop-filter: blur(4px);
+}
+.rel-flecha svg { width: .9rem; height: .9rem; flex-shrink: 0; }
+.rel-flecha:hover  { background: var(--nogal); border-color: var(--oro); }
+.rel-flecha:disabled { opacity: .2; cursor: default; pointer-events: none; }
+
+.rel-flecha--prev { left: .5rem; }
+.rel-flecha--next { right: .5rem; }
+
+/* ════════════════════════════════════════
+   RESPONSIVE — ajustes móvil
+════════════════════════════════════════ */
+@media (max-width: 899px) {
+    .det-ficha-col {
+        position: static;
+        max-height: none;
+        border-left: none;
+        border-top: 3px solid var(--oro);
+    }
+    .det-normativa-ref { padding: .75rem 1.5rem; }
+}
+</style>
+
+<script>
+/* ════════════════════════════════════════
+   CARRUSEL DE MINIATURAS RELACIONADAS
+   Flechas prev/next con scroll suave
+════════════════════════════════════════ */
+(function () {
+    const track   = document.getElementById('rel-track') as HTMLElement | null;
+    const btnPrev = document.getElementById('rel-prev')  as HTMLButtonElement | null;
+    const btnNext = document.getElementById('rel-next')  as HTMLButtonElement | null;
+
+    if (!track || !btnPrev || !btnNext) return;
+
+    const items = Array.from(track.querySelectorAll<HTMLElement>('.rel-item'));
+    let current = 0;
+
+    /* Ancho de un item + gap */
+    function itemWidth(): number {
+        const item = items[0];
+        if (!item) return 0;
+        const gap = parseFloat(getComputedStyle(track).gap) || 16;
+        return item.offsetWidth + gap;
+    }
+
+    /* Desplaza al índice dado */
+    function goTo(idx: number): void {
+        current = Math.max(0, Math.min(idx, items.length - 1));
+        track.scrollTo({ left: current * itemWidth(), behavior: 'smooth' });
+        updateFlechas();
+    }
+
+    /* Habilita/deshabilita flechas según posición */
+    function updateFlechas(): void {
+        btnPrev.disabled = current === 0;
+        btnNext.disabled = current >= items.length - 1;
+    }
+
+    btnPrev.addEventListener('click', () => goTo(current - 1));
+    btnNext.addEventListener('click', () => goTo(current + 1));
+
+    /* Sincroniza con scroll táctil nativo */
+    let t: ReturnType<typeof setTimeout>;
+    track.addEventListener('scroll', () => {
+        clearTimeout(t);
+        t = setTimeout(() => {
+            const w = itemWidth();
+            if (w > 0) { current = Math.round(track.scrollLeft / w); updateFlechas(); }
+        }, 80);
+    }, { passive: true });
+
+    updateFlechas();
+})();
+</script>
