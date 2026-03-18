@@ -522,15 +522,19 @@ import Layout from '../layouts/Layout.astro';
 
         const formData = new FormData(form);
 
-        fetch('/', {
+        fetch('/contacto', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
         })
-        .then(() => {
-            /* Éxito */
-            divOk.style.display  = 'block';
-            form.reset();
+        .then((res) => {
+            /* Netlify devuelve 200 si procesó el envío correctamente */
+            if (res.ok) {
+                divOk.style.display  = 'block';
+                form.reset();
+            } else {
+                divErr.style.display = 'block';
+            }
         })
         .catch(() => {
             /* Error de red */
