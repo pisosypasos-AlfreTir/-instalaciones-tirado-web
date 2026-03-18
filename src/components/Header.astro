@@ -1,67 +1,145 @@
 ---
 // src/components/Header.astro
 ---
+
 <header class="header">
     <nav class="nav-container">
+
+        <!-- Logo -->
         <a href="/" class="logo-container">
             <img src="/imagenes/Logo.png" alt="Instalaciones Tirado SAS" class="logo-img" />
             <span class="logo-text">Instalaciones Tirado</span>
         </a>
+
+        <!-- Hamburguesa: checkbox oculto + label visible (CSS-only, sin JS) -->
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
+        <label for="nav-toggle" class="nav-hamburger" aria-label="Abrir menú">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </label>
+
+        <!-- Links de navegación -->
         <div class="nav-links">
-            <a href="/" class="nav-btn">Inicio</a>
+            <a href="/"         class="nav-btn">Inicio</a>
             <a href="/servicios" class="nav-btn">Servicios</a>
-            <a href="/contacto" class="nav-btn contact-btn">Contacto</a>
+            <a href="/contacto"  class="nav-btn contact-btn">Contacto</a>
         </div>
+
     </nav>
 </header>
 
 <style>
-  .header {
-    background-color: #2D241E; /* nogal */
+/* ════════════════════════════════════════
+   HEADER BASE
+════════════════════════════════════════ */
+.header {
+    background-color: #2D241E;
     color: white;
     box-shadow: 0 4px 24px rgba(45, 36, 30, 0.18);
     position: sticky;
     top: 0;
-    z-index: 50;
-  }
+    z-index: 100;
+}
 
-  .nav-container {
+.nav-container {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0.75rem 2rem;
+    padding: 0.75rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
+    flex-wrap: wrap;           /* permite que .nav-links baje en móvil */
+    gap: 0;
+    position: relative;
+}
 
-  .logo-container {
+/* ════════════════════════════════════════
+   LOGO
+════════════════════════════════════════ */
+.logo-container {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.65rem;
     text-decoration: none;
-  }
+    z-index: 2;
+}
 
-  .logo-img {
-    height: 48px;   /* Proporcional — antes era 170px */
+.logo-img {
+    height: 40px;
     width: auto;
     display: block;
-  }
+}
 
-  .logo-text {
-    font-family: 'Playfair Display', serif; /* Sistema tipográfico del proyecto */
-    font-size: 1.25rem;
+.logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: -0.01em;
     color: white;
-  }
+    white-space: nowrap;
+}
 
-  .nav-links {
+/* ════════════════════════════════════════
+   HAMBURGUESA — checkbox oculto
+════════════════════════════════════════ */
+
+/* El input nunca es visible */
+.nav-toggle {
+    display: none;
+}
+
+/* Label: 3 barras apiladas */
+.nav-hamburger {
+    display: none;              /* oculto en desktop */
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.25rem;
+    height: 2.25rem;
+    cursor: pointer;
+    z-index: 2;
+    padding: 0.25rem;
+    border-radius: 2px;
+    transition: background .2s;
+}
+.nav-hamburger:hover {
+    background: rgba(201,168,76,.12);
+}
+
+.bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: white;
+    border-radius: 1px;
+    transition: transform .3s cubic-bezier(.16,1,.3,1),
+                opacity   .3s;
+    transform-origin: center;
+}
+
+/* ── Animación X al abrir ── */
+.nav-toggle:checked ~ .nav-hamburger .bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle:checked ~ .nav-hamburger .bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+.nav-toggle:checked ~ .nav-hamburger .bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ════════════════════════════════════════
+   LINKS — desktop
+════════════════════════════════════════ */
+.nav-links {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-  }
+}
 
-  .nav-btn {
+.nav-btn {
     padding: 0.5rem 1.1rem;
     border-radius: 2px;
     font-family: 'Inter', sans-serif;
@@ -73,23 +151,124 @@
     transition: color 0.2s, background-color 0.2s;
     display: inline-block;
     text-decoration: none;
-  }
-
-  .nav-btn:hover {
-    color: #C9A84C; /* oro-premium */
+    white-space: nowrap;
+}
+.nav-btn:hover {
+    color: #C9A84C;
     background-color: rgba(201, 168, 76, 0.08);
-  }
+}
 
-  .contact-btn {
-    color: #2D241E;           /* nogal */
-    background-color: #C9A84C; /* oro-premium */
+.contact-btn {
+    color: #2D241E;
+    background-color: #C9A84C;
     font-weight: 700;
     padding: 0.5rem 1.4rem;
     border-radius: 2px;
-  }
-
-  .contact-btn:hover {
+}
+.contact-btn:hover {
     background-color: #fff;
     color: #2D241E;
-  }
+}
+
+/* ════════════════════════════════════════
+   MÓVIL (< 640px)
+════════════════════════════════════════ */
+@media (max-width: 639px) {
+
+    /* Muestra la hamburguesa */
+    .nav-hamburger {
+        display: flex;
+    }
+
+    /* El menú se convierte en un panel que cuelga del header */
+    .nav-links {
+        /* Ocupa todo el ancho por debajo del logo */
+        flex-basis: 100%;
+        order: 3;               /* va después del logo y del botón */
+        flex-direction: column;
+        align-items: stretch;   /* links a todo el ancho */
+        gap: 0;
+
+        /* Estado CERRADO: altura 0 + invisible */
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(-6px);
+        transition:
+            max-height .35s cubic-bezier(.16,1,.3,1),
+            opacity    .3s ease,
+            transform  .3s ease;
+
+        /* Borde superior que aparece al abrir */
+        border-top: 1px solid transparent;
+        margin-top: 0;
+    }
+
+    /* Estado ABIERTO: checkbox marcado */
+    .nav-toggle:checked ~ .nav-links {
+        max-height: 300px;      /* suficiente para 3 links */
+        opacity: 1;
+        transform: translateY(0);
+        border-top-color: rgba(255,255,255,.08);
+        margin-top: 0.5rem;
+        padding-bottom: 0.75rem;
+    }
+
+    /* Cada link ocupa una fila completa */
+    .nav-btn {
+        padding: 0.85rem 1rem;
+        border-radius: 0;
+        font-size: 0.9rem;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+        color: rgba(255,255,255,.8);
+    }
+    .nav-btn:last-child {
+        border-bottom: none;
+    }
+    .nav-btn:hover {
+        background-color: rgba(201,168,76,.1);
+        color: #C9A84C;
+    }
+
+    /* Botón Contacto: destaca igual pero a full-width */
+    .contact-btn {
+        margin: 0.5rem 0 0;
+        padding: 0.85rem 1rem;
+        border-radius: 2px;
+        text-align: center;
+    }
+
+    /* Logo: texto un poco más pequeño en móvil */
+    .logo-text {
+        font-size: 0.95rem;
+    }
+    .logo-img {
+        height: 34px;
+    }
+
+}
+
+/* ════════════════════════════════════════
+   TABLET (640 – 899px): header en fila,
+   sin hamburguesa, links compactos
+════════════════════════════════════════ */
+@media (min-width: 640px) and (max-width: 899px) {
+    .nav-hamburger { display: none; }
+    .nav-links {
+        max-height: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        overflow: visible !important;
+    }
+    .nav-btn {
+        font-size: 0.75rem;
+        padding: 0.45rem 0.85rem;
+    }
+    .contact-btn {
+        padding: 0.45rem 1rem;
+    }
+    .logo-text {
+        font-size: 1rem;
+    }
+}
 </style>
