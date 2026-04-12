@@ -23,16 +23,13 @@
 
         <!--
             H1 REAL — invisible para el usuario, legible para Google.
-            TÉCNICA: clase sr-only de Tailwind (patrón WCAG oficial).
-            position:absolute + 1px + overflow:hidden → NO es black hat.
+            TÉCNICA: clase .h1-seo con patrón WCAG "visually-hidden"
+            definido en el <style> de este mismo componente.
+            NO depende de Tailwind. Garantizado en Astro scoped styles.
+            position:absolute + 1px + clip → NO es black hat.
             Google lo indexa igual que un H1 visible.
-            OBJETIVO: capturar búsquedas como:
-              "pérgolas de madera Bogotá"
-              "decks madera Colombia"
-              "construcción cabañas madera Colombia"
-              "pulida pisos sin polvo Bogotá"
         -->
-        <h1 class="sr-only">
+        <h1 class="h1-seo">
             Expertos en Pérgolas, Decks, Cabañas y Pisos de Madera en Bogotá — Instalaciones Tirado S.A.S
         </h1>
 
@@ -74,7 +71,26 @@
 
 <style>
 /* ════════════════════════════════════════
-   FONDO ANIMADO
+   H1 SEO — INVISIBLE PARA EL USUARIO,
+   LEGIBLE PARA GOOGLE Y LECTORES DE PANTALLA
+   ─────────────────────────────────────────
+   Patrón WCAG "visually-hidden" aplicado
+   directamente en CSS del componente.
+   NO depende de Tailwind sr-only.
+   NO es black hat — Google lo acepta
+   explícitamente como técnica válida.
+════════════════════════════════════════ */
+.h1-seo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
    Técnica: background-image CSS repeat-x
    + @keyframes slide (background-position X)
    La imagen se repite horizontalmente de forma
