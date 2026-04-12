@@ -1,28 +1,179 @@
 ---
 // src/layouts/Layout.astro
+// SEO v2 — title sin duplicidad · meta description dinámica · JSON-LD LocalBusiness
 import '../styles/globals.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BotonWhatsapp from '../components/BotonWhatsapp.astro';
 
 export interface Props {
-    title: string;
+    title:        string;
+    description?: string;
 }
 
-const { title } = Astro.props;
+const {
+    title,
+    // Fallback de 154 caracteres — incluye ciudad, servicios clave y diferenciador
+    description = "Instalaciones Tirado S.A.S · Pisos de madera, pérgolas, decks, cabañas y escaleras en Bogotá. Instalación profesional, +30 años de oficio, garantía por escrito.",
+} = Astro.props;
+
+// ── Canonical automático (evita duplicados www / sin-www / slash) ──
+const canonicalURL = new URL(Astro.url.pathname, "https://www.instalacionestirado.com");
+
+// ── Title final: nunca duplica la marca ──
+// Cada página pasa su propio title con la keyword principal.
+// Layout solo añade " | Instalaciones Tirado S.A.S" como sufijo.
+// Excepción: si la página ya incluye el nombre de la empresa, lo usa tal cual.
+const MARCA      = "Instalaciones Tirado S.A.S";
+const titleFinal = title.includes(MARCA) ? title : `${title} | ${MARCA}`;
+
+// ── JSON-LD LocalBusiness — solo los 6 servicios que existen en el sitio ──
+// POR QUÉ: Google usa este schema para el Knowledge Panel y para búsquedas
+// locales. "areaServed" con Bogotá + Colombia extiende la cobertura geográfica
+// del índice. SOLO se listan servicios que tienen página/contenido real.
+const jsonLD = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type":        "LocalBusiness",
+            "@id":          "https://www.instalacionestirado.com/#empresa",
+            "name":         "Instalaciones Tirado S.A.S",
+            "alternateName": "Pisos y Pasos Tirado",
+            "description":  "Empresa colombiana con más de 30 años de experiencia en instalación de pisos de madera, construcción de pérgolas, decks, cabañas y escaleras para proyectos residenciales y comerciales en Bogotá y toda Colombia.",
+            "url":          "https://www.instalacionestirado.com",
+            "logo":         "https://www.instalacionestirado.com/imagenes/Logo.png",
+            "telephone":    "+573132566705",
+            "email":        "pisosypasos@gmail.com",
+            "foundingDate": "1994",
+            "priceRange":   "$$",
+            "openingHoursSpecification": [
+                {
+                    "@type":      "OpeningHoursSpecification",
+                    "dayOfWeek":  ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+                    "opens":      "08:00",
+                    "closes":     "18:00"
+                }
+            ],
+            "address": {
+                "@type":           "PostalAddress",
+                "streetAddress":   "Carrera 20 # 161 - 36, Toberín",
+                "addressLocality": "Bogotá",
+                "addressRegion":   "Cundinamarca",
+                "addressCountry":  "CO"
+            },
+            "areaServed": [
+                { "@type": "City",    "name": "Bogotá"       },
+                { "@type": "City",    "name": "Medellín"     },
+                { "@type": "City",    "name": "Cali"         },
+                { "@type": "Country", "name": "Colombia"     }
+            ],
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name":  "Servicios de Madera — Instalaciones Tirado S.A.S",
+                "itemListElement": [
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type":       "Service",
+                            "name":        "Instalación de Pisos Laminados y SPC",
+                            "description": "Suministro e instalación de pisos laminados AC4/AC5 y SPC de núcleo rígido en Bogotá y Colombia. Ideales para alto tránsito y zonas húmedas."
+                        }
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type":       "Service",
+                            "name":        "Construcción de Decks y Exteriores de Madera",
+                            "description": "Instalación de decks en madera tratada o WPC sintético para terrazas, jardines y piscinas. Fijación oculta y tratamiento anticorrosivo en todo Colombia."
+                        }
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type":       "Service",
+                            "name":        "Pulida de Pisos de Madera Sin Polvo",
+                            "description": "Restauración de pisos de madera mediante sistema dust-free (succión en origen). Lijado, sellado y barnizado sin contaminar el ambiente. Disponible en Bogotá."
+                        }
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type":       "Service",
+                            "name":        "Diseño y Construcción de Pérgolas y Estructuras de Madera",
+                            "description": "Pérgolas y estructuras en madera tratada para terrazas y patios. Cálculo de cargas, anclajes homologados y tratamiento por clase de riesgo en Colombia."
+                        }
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type":       "Service",
+                            "name":        "Construcción de Cabañas de Madera en Colombia",
+                            "description": "Diseño y construcción de cabañas en madera maciza para fincas, glamping y proyectos rurales. Estructura certificada y madera seca de cámara en todo Colombia."
+                        }
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type":       "Service",
+                            "name":        "Fabricación e Instalación de Escaleras de Madera de Lujo",
+                            "description": "Diseño, fabricación y revestimiento de escaleras en madera maciza combinadas con vidrio y acero. Tolerancia de mecanizado ±0,5 mm. Proyectos en Bogotá y Colombia."
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "@type":    "WebSite",
+            "@id":      "https://www.instalacionestirado.com/#sitio",
+            "name":     "Instalaciones Tirado S.A.S",
+            "url":      "https://www.instalacionestirado.com",
+            "inLanguage": "es-CO"
+        }
+    ]
+};
 ---
 <!doctype html>
-<html lang="es">
+<html lang="es-CO">
     <head>
         <meta charset="UTF-8" />
-        <meta name="description" content="Instalaciones Tirado SAS — Carpintería de autor y estructuras en madera maciza. Escaleras, pisos y techos de alta calidad en Bogotá, Colombia." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" type="image/svg+xml" href="/Tronco-.png" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+        <!-- TITLE: keyword principal + marca (sin duplicidad) -->
+        <title>{titleFinal}</title>
+
+        <!-- META DESCRIPTION: 154 caracteres, ciudad + servicios + diferenciador -->
+        <meta name="description" content={description} />
+
+        <!-- CANONICAL: evita duplicados www/no-www y variantes de URL -->
+        <link rel="canonical" href={canonicalURL.href} />
+
+        <!-- ROBOTS: autoriza snippets y previsualización de imagen completa -->
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+
+        <!-- GEO: señal de localización local para Google -->
+        <meta name="geo.region"   content="CO-DC" />
+        <meta name="geo.placename" content="Bogotá, Colombia" />
+
+        <!-- OPEN GRAPH: mejora CTR al compartir en WhatsApp y redes sociales -->
+        <meta property="og:type"        content="website" />
+        <meta property="og:url"         content={canonicalURL.href} />
+        <meta property="og:title"       content={titleFinal} />
+        <meta property="og:description" content={description} />
+        <meta property="og:locale"      content="es_CO" />
+        <meta property="og:site_name"   content="Instalaciones Tirado S.A.S" />
+
+        <!-- FAVICON -->
+        <link rel="icon" type="image/png" href="/Tronco-.png" />
+
+        <!-- FUENTES: preconnect primero para reducir latencia -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+        <!-- JSON-LD: schema LocalBusiness con los 6 servicios reales del sitio -->
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLD)} />
+
         <meta name="generator" content={Astro.generator} />
-        <title>{title} | Instalaciones Tirado SAS</title>
     </head>
     <body class="relative">
         <Header />
