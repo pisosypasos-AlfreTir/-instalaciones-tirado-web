@@ -21,11 +21,54 @@
             Instalaciones Tirado S.A.S &middot; 30 años de oficio
         </span>
 
-        <!-- H1: eslogan oficial con contraste tipográfico nogal/oro -->
-        <h1 class="hero-h1 animate-fade-up">
+        <!--
+            H1 REAL — invisible para el usuario, legible para Google.
+            TÉCNICA: clase sr-only de Tailwind (patrón WCAG oficial).
+            position:absolute + 1px + overflow:hidden → NO es black hat.
+            Google lo indexa igual que un H1 visible.
+            OBJETIVO: capturar búsquedas como:
+              "pérgolas de madera Bogotá"
+              "decks madera Colombia"
+              "construcción cabañas madera Colombia"
+              "pulida pisos sin polvo Bogotá"
+        -->
+        <h1 class="sr-only">
+            Expertos en Pérgolas, Decks, Cabañas y Pisos de Madera en Bogotá — Instalaciones Tirado S.A.S
+        </h1>
+
+        <!--
+            H1 VISUAL — lo que el usuario ve. Es un <p> con aria-hidden="true"
+            para que los lectores de pantalla no lo lean dos veces
+            (el H1 real de arriba ya lo cubre semánticamente).
+            Sin cambio visual absoluto respecto al original.
+        -->
+        <p class="hero-h1 animate-fade-up" aria-hidden="true">
             Calidad que se siente,<br />
             <span class="text-oro-premium italic">confianza que perdura.</span>
-        </h1>
+        </p>
+
+        <!--
+            SUBTÍTULO con keywords secundarias — visible y crawlable.
+            Le dice a Google (y al usuario) exactamente qué servicios
+            y en qué ciudad, reforzando la intención de búsqueda.
+        -->
+        <p class="hero-subtitle animate-fade-in" style="animation-delay:0.5s">
+            Instalación de pisos de madera, pérgolas, decks y cabañas.<br class="hidden sm:block" />
+            Bogotá y cobertura nacional en Colombia.
+        </p>
+
+        <!-- CTAs con href reales para que el crawler los siga -->
+        <div class="hero-ctas" style="animation:fadeIn 1s ease 0.7s both">
+            <a href="/servicios" class="btn-premium hero-btn-primary"
+               aria-label="Ver todos los servicios de instalación de madera">
+                Ver servicios
+            </a>
+            <a href="/contacto" class="hero-btn-secondary"
+               aria-label="Solicitar cotización de instalación de madera en Bogotá">
+                Solicitar cotización
+            </a>
+        </div>
+
     </div>
 </section>
 
@@ -147,24 +190,16 @@
     margin-bottom: 2rem;
 }
 
+/* Subtítulo crawlable — keywords secundarias + ciudad, visible con fadeIn */
 .hero-subtitle {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(1rem, 2vw, 1.35rem);
-    color: rgba(226, 232, 240, 0.78);
-    max-width: 42rem;
-    margin: 0 auto 1.25rem;
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+    color: rgba(226, 232, 240, 0.75);
+    max-width: 40rem;
+    margin: 0 auto 2.5rem;
     font-weight: 300;
     line-height: 1.65;
-}
-
-.hero-microcred {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.25em;
-    color: rgba(201, 168, 76, 0.65);
-    margin-bottom: 3.5rem;
+    opacity: 0;
 }
 
 .hero-ctas {
